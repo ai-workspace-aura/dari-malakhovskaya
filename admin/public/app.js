@@ -81,11 +81,9 @@ async function boot() {
   try { me = await api('/api/me'); } catch (e) {
     if (!$('loginView').hidden) return;  // 401: уже показали вход
     $('loginView').hidden = false;
-    $('loginForm').hidden = true;
     $('loginErr').textContent = 'Сервер не отвечает: ' + e.message;
     return;
   }
-  $('loginForm').hidden = false;
   state.user = me.user;
   state.settings = me.settings;
   $('whoName').textContent = me.user.name || me.user.email;
