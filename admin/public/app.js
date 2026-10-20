@@ -348,11 +348,9 @@ function renderFunnels() {
     const t = tot[ch];
     return `<div class="funnel" style="border-top-color:${chColor(ch)}">
       <h3>${CH[ch].name}</h3>
-      <div class="step"><span class="mut">${countLabel[ch]}</span><b>${fmt(t.posts)}</b></div>
-      <div class="step"><span class="mut">${REACH_LABEL[ch] || 'Охват'}</span><b>${fmt(t.reach)}</b></div>
-      <div class="conv">${t.posts ? '≈ ' + fmt(t.reach / t.posts) + ' на единицу' : '&nbsp;'}</div>
-      <div class="step"><span class="mut">Переходы</span><b>${fmt(t.clicks)}</b></div>
-      <div class="conv">CTR ${pct(t.clicks, t.reach)}</div>
+      <div class="step"><span class="mut">${countLabel[ch]}</span><span class="val"><b>${fmt(t.posts)}</b></span></div>
+      <div class="step"><span class="mut">${REACH_LABEL[ch] || 'Охват'}</span><span class="val"><b>${fmt(t.reach)}</b>${t.posts ? `<small>≈ ${fmt(t.reach / t.posts)} на единицу</small>` : ''}</span></div>
+      <div class="step"><span class="mut">Переходы</span><span class="val"><b>${fmt(t.clicks)}</b><small>CTR ${pct(t.clicks, t.reach)}</small></span></div>
     </div>`;
   }).join('');
 }
