@@ -11,12 +11,13 @@
 <body>
 
 <div id="loginView" class="login" hidden>
-  <h1 style="margin-bottom:24px">Вход</h1>
+  <h1 style="margin-bottom:8px" id="loginTitle">Вход</h1>
+  <p class="mut small" id="loginHint" style="margin:0 0 20px"></p>
   <form id="loginForm">
     <input class="field" name="email" type="email" placeholder="Почта" autocomplete="username" required>
     <input class="field" name="password" type="password" placeholder="Пароль" autocomplete="current-password" required>
     <div class="err" id="loginErr"></div>
-    <button class="btn primary" type="submit">Войти</button>
+    <button class="btn primary" type="submit" id="loginBtn">Войти</button>
   </form>
 </div>
 

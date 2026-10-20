@@ -42,7 +42,7 @@ async function api(path, opts = {}) {
   });
   let data = {};
   try { data = await res.json(); } catch (e) { /* пустой ответ */ }
-  if (res.status === 401 && path !== '/api/login') { showLogin(); throw new Error(data.error || 'Нужно войти'); }
+  if (res.status === 401 && !['/api/login', '/api/setup'].includes(path)) { await showLogin(); throw new Error(data.error || 'Нужно войти'); }
   if (!res.ok) throw new Error(data.error || `Ошибка ${res.status}`);
   return data;
 }
@@ -59,9 +59,15 @@ const fail = e => toast(e.message || String(e));
 
 // ---------- вход ----------
 
-function showLogin() {
+let setupMode = false;
+
+async function showLogin() {
   $('appView').hidden = true;
   $('loginView').hidden = false;
+  try { setupMode = (await fetch('/api/setup').then(r => r.json())).needs_setup === true; } catch (e) { setupMode = false; }
+  $('loginTitle').textContent = setupMode ? 'Первая учётка' : 'Вход';
+  $('loginHint').textContent = setupMode ? 'В админке ещё нет пользователей. Придумайте почту и пароль (от 8 символов): они станут вашим входом.' : '';
+  $('loginBtn').textContent = setupMode ? 'Создать и войти' : 'Войти';
 }
 
 $('loginForm').onsubmit = async e => {
@@ -69,7 +75,7 @@ $('loginForm').onsubmit = async e => {
   const f = new FormData(e.target);
   $('loginErr').textContent = '';
   try {
-    await api('/api/login', {method: 'POST', body: {email: f.get('email'), password: f.get('password')}});
+    await api(setupMode ? '/api/setup' : '/api/login', {method: 'POST', body: {email: f.get('email'), password: f.get('password')}});
     boot();
   } catch (err) { $('loginErr').textContent = err.message; }
 };

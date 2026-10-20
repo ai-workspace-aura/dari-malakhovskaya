@@ -648,8 +648,8 @@ def secure_cookie():
 # -- вход
 
 @route("POST", "/api/login", auth=False)
-def api_login(h):
-    b = h.body_json()
+def api_login(h, b=None):
+    b = b or h.body_json()
     with db() as c:
         u = c.execute("SELECT * FROM users WHERE email=?", ((b.get("email") or "").strip().lower(),)).fetchone()
         if not u or not check_password(b.get("password") or "", u["pw_hash"]):
@@ -661,6 +661,28 @@ def api_login(h):
     flags = "; Secure" if secure_cookie() else ""
     h.send_json({"ok": True}, headers={
         "Set-Cookie": f"sid={tok}; HttpOnly; SameSite=Lax; Path=/; Max-Age={SESSION_DAYS * 86400}{flags}"})
+
+
+@route("GET", "/api/setup", auth=False)
+def api_setup_state(h):
+    with db() as c:
+        return {"needs_setup": not c.execute("SELECT 1 FROM users LIMIT 1").fetchone()}
+
+
+@route("POST", "/api/setup", auth=False)
+def api_setup(h):
+    """Первую учётку можно создать прямо со страницы, пока в базе нет ни одного пользователя."""
+    b = h.body_json()
+    email = (b.get("email") or "").strip().lower()
+    pw = b.get("password") or ""
+    if "@" not in email or len(pw) < 8:
+        raise ApiError(400, "Нужна почта и пароль не короче 8 символов")
+    with db() as c:
+        if c.execute("SELECT 1 FROM users LIMIT 1").fetchone():
+            raise ApiError(403, "Учётка уже создана, войдите")
+        c.execute("INSERT INTO users(email,name,pw_hash,created_at) VALUES(?,?,?,?)",
+                  (email, b.get("name") or "", hash_password(pw), now_iso()))
+    return api_login(h, {"email": email, "password": pw})
 
 
 @route("POST", "/api/logout")
