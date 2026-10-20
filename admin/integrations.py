@@ -4,6 +4,7 @@
 пишет данные в базу и возвращает короткое сообщение для журнала синхронизаций.
 Как получить ключи и токены — в README.md, раздел «Интеграции».
 """
+import asyncio
 import datetime as dt
 import json
 import time
@@ -22,6 +23,12 @@ def http_json(url, timeout=60):
     except urllib.error.HTTPError as e:
         body = e.read().decode(errors="replace")[:500]
         raise RuntimeError(f"HTTP {e.code}: {body}") from None
+
+
+def require(section, *keys):
+    missing = [k for k in keys if not section.get(k)]
+    if missing:
+        raise RuntimeError("Не заполнено: " + ", ".join(missing))
 
 
 def since_date(section, default_days=45):
@@ -47,7 +54,8 @@ def save_media(db, items):
 def sync_getcourse(cfg, db, import_table, max_wait=300, **_):
     """GetCourse готовит выгрузку асинхронно. Ждём до max_wait секунд; если не успела,
     номер выгрузки запоминаем и забираем её при следующем запуске."""
-    g = cfg["getcourse"]
+    g = cfg.get("getcourse", {})
+    require(g, "domain", "api_key")
     base = f"https://{g['domain']}/pl/api/account"
     with db() as c:
         row = c.execute("SELECT value FROM settings WHERE key='gc_pending_export'").fetchone()
@@ -85,8 +93,9 @@ def parse_ig_time(ts):
 
 
 def sync_instagram(cfg, db, **_):
-    ig = cfg["instagram"]
-    graph = f"https://{ig.get('graph_host', 'graph.facebook.com')}/{ig.get('version', 'v21.0')}"
+    ig = cfg.get("instagram", {})
+    require(ig, "user_id", "access_token")
+    graph = f"https://{ig.get('graph_host', 'graph.instagram.com')}/{ig.get('version', 'v21.0')}"
 
     def get(path, **params):
         params["access_token"] = ig["access_token"]
@@ -138,57 +147,127 @@ def sync_instagram(cfg, db, **_):
 
 def _telethon():
     try:
+        from telethon import TelegramClient, errors
         from telethon.sessions import StringSession
-        from telethon.sync import TelegramClient
     except ImportError:
         raise RuntimeError("Не установлен telethon: выполните pip3 install telethon") from None
-    return TelegramClient, StringSession
+    return TelegramClient, StringSession, errors
 
 
-def telegram_login(cfg):
-    TelegramClient, StringSession = _telethon()
-    t = cfg["telegram"]
-    with TelegramClient(StringSession(), int(t["api_id"]), t["api_hash"]) as client:
-        print("\nСтрока сессии (вставьте в config.json → telegram.session):\n")
-        print(client.session.save())
+def _client(t, session=""):
+    TelegramClient, StringSession, _ = _telethon()
+    if not t.get("api_id") or not t.get("api_hash"):
+        raise RuntimeError("Сначала сохраните api_id и api_hash")
+    return TelegramClient(StringSession(session or ""), int(t["api_id"]), t["api_hash"])
 
 
-def telegram_channels(cfg):
-    TelegramClient, StringSession = _telethon()
-    t = cfg["telegram"]
-    with TelegramClient(StringSession(t["session"]), int(t["api_id"]), t["api_hash"]) as client:
-        print("\nКаналы этого аккаунта (скопируйте нужное значение из левой колонки):\n")
-        for d in client.iter_dialogs():
-            if d.is_channel and not d.is_group:
-                username = getattr(d.entity, "username", None)
-                print(f"{'@' + username if username else d.id:<22} {d.name}")
+def _is_admin(entity):
+    return bool(getattr(entity, "creator", False) or getattr(entity, "admin_rights", None))
+
+
+def tg_send_code(t, phone):
+    """Шаг 1 входа: Telegram присылает код в приложение. Возвращает состояние для шага 2."""
+    async def run():
+        client = _client(t)
+        await client.connect()
+        try:
+            r = await client.send_code_request(phone)
+            return {"session": client.session.save(), "phone": phone, "hash": r.phone_code_hash}
+        finally:
+            await client.disconnect()
+    return asyncio.run(run())
+
+
+def tg_sign_in(t, pending, code=None, password=None):
+    """Шаг 2 входа: код из Telegram, а при облачном пароле — ещё и пароль."""
+    _, _, errors = _telethon()
+
+    async def run():
+        client = _client(t, pending["session"])
+        await client.connect()
+        try:
+            if password:
+                await client.sign_in(password=password)
+            else:
+                try:
+                    await client.sign_in(phone=pending["phone"], code=code, phone_code_hash=pending["hash"])
+                except errors.SessionPasswordNeededError:
+                    return {"need_password": True, "session": client.session.save()}
+            me = await client.get_me()
+            name = " ".join(x for x in (me.first_name, me.last_name) if x) or me.username or me.phone
+            return {"session": client.session.save(), "name": name}
+        finally:
+            await client.disconnect()
+    return asyncio.run(run())
+
+
+async def _channels(client):
+    out = []
+    async for d in client.iter_dialogs():
+        if d.is_channel and not d.is_group:
+            username = getattr(d.entity, "username", None)
+            out.append({"ref": "@" + username if username else str(d.id), "title": d.name,
+                        "admin": _is_admin(d.entity), "entity": d.entity})
+    return out
+
+
+def tg_channels(t):
+    async def run():
+        client = _client(t, t.get("session"))
+        await client.connect()
+        try:
+            if not await client.is_user_authorized():
+                raise RuntimeError("Аккаунт Telegram не подключён или сессия завершена")
+            return [{k: v for k, v in ch.items() if k != "entity"} for ch in await _channels(client)]
+        finally:
+            await client.disconnect()
+    return asyncio.run(run())
 
 
 def sync_telegram(cfg, db, **_):
-    TelegramClient, StringSession = _telethon()
-    t = cfg["telegram"]
+    t = cfg.get("telegram", {})
+    require(t, "api_id", "api_hash", "session")
     since = dt.datetime.combine(since_date(t), dt.time.min, tzinfo=MSK)
-    out = []
-    counts = {}
-    with TelegramClient(StringSession(t["session"]), int(t["api_id"]), t["api_hash"]) as client:
-        for channel, ref in (("tg_open", t.get("open_channel")), ("tg_closed", t.get("closed_channel"))):
-            if not ref:
-                continue
-            entity = client.get_entity(int(ref) if str(ref).lstrip("-").isdigit() else ref)
-            seen_albums = set()
-            counts[channel] = 0
-            for msg in client.iter_messages(entity, offset_date=since, reverse=True):
-                if msg.action:  # служебные сообщения: закреп, смена названия и т. п.
-                    continue
-                if msg.grouped_id:  # альбом из нескольких фото — это один пост
-                    if msg.grouped_id in seen_albums:
-                        continue
-                    seen_albums.add(msg.grouped_id)
-                key = f"tg:{entity.id}:{msg.grouped_id or msg.id}"
+    wanted = [(ch, t.get(key)) for ch, key in (("tg_open", "open_channel"), ("tg_closed", "closed_channel")) if t.get(key)]
+    if not wanted:
+        return "Каналы не выбраны"
+
+    async def run():
+        client = _client(t, t.get("session"))
+        await client.connect()
+        try:
+            if not await client.is_user_authorized():
+                raise RuntimeError("Аккаунт Telegram не подключён или сессия завершена")
+            # каналы ищем среди диалогов аккаунта: так находятся и закрытые каналы по числовому ID
+            found = {ch["ref"].lower(): ch for ch in await _channels(client)}
+            out, counts = [], {}
+            for channel, ref in wanted:
+                ch = found.get(str(ref).lower())
+                if not ch:
+                    raise RuntimeError(f"Аккаунт не подписан на канал {ref}")
+                if ch["admin"]:
+                    # защита: аккаунт с правами админа мог бы менять канал, такой не используем
+                    raise RuntimeError(f"У аккаунта есть права админа в «{ch['title']}». Снимите их: "
+                                       "для статистики достаточно обычной подписки")
+                entity = ch["entity"]
                 username = getattr(entity, "username", None)
-                link = f"https://t.me/{username}/{msg.id}" if username else None
-                out.append((key, "telegram", channel, msg.date.astimezone(MSK).date().isoformat(),
-                            msg.views or 0, link))
-                counts[channel] += 1
+                seen_albums = set()
+                counts[ch["title"]] = 0
+                async for msg in client.iter_messages(entity, offset_date=since, reverse=True):
+                    if msg.action:  # служебные сообщения: закреп, смена названия и т. п.
+                        continue
+                    if msg.grouped_id:  # альбом из нескольких фото — это один пост
+                        if msg.grouped_id in seen_albums:
+                            continue
+                        seen_albums.add(msg.grouped_id)
+                    out.append((f"tg:{entity.id}:{msg.grouped_id or msg.id}", "telegram", channel,
+                                msg.date.astimezone(MSK).date().isoformat(), msg.views or 0,
+                                f"https://t.me/{username}/{msg.id}" if username else None))
+                    counts[ch["title"]] += 1
+            return out, counts
+        finally:
+            await client.disconnect()
+
+    out, counts = asyncio.run(run())
     save_media(db, out)
-    return ", ".join(f"{k}: {v} постов" for k, v in counts.items()) or "Каналы не указаны в config.json"
+    return "; ".join(f"{k}: {v} постов" for k, v in counts.items())

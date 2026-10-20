@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS payments(
   id {pk}, gc_id TEXT UNIQUE, date TEXT, client TEXT, email TEXT, tariff TEXT,
   method TEXT, manager TEXT, status TEXT, amount {real}, paid {real}, note TEXT, source TEXT, updated_at TEXT);
 CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT);
+CREATE TABLE IF NOT EXISTS secrets(key TEXT PRIMARY KEY, value TEXT);
 CREATE TABLE IF NOT EXISTS sync_log(
   id {pk}, source TEXT, ts TEXT, ok INTEGER, message TEXT);
 """
@@ -167,6 +168,8 @@ def init_db():
                       (k, json.dumps(v, ensure_ascii=False)))
         if not c.execute("SELECT 1 FROM plan_days LIMIT 1").fetchone() and PLAN_SEED.exists():
             seed_plan(c)
+        if not get_secret(c, "cron_key"):
+            set_secret(c, "cron_key", secrets.token_urlsafe(24))
         boot_email = os.environ.get("ADMIN_BOOTSTRAP_EMAIL")
         boot_pw = os.environ.get("ADMIN_BOOTSTRAP_PASSWORD")
         if boot_email and boot_pw and not c.execute("SELECT 1 FROM users LIMIT 1").fetchone():
@@ -184,12 +187,54 @@ def now_iso():
 
 
 def load_config():
-    # на Vercel весь конфиг лежит JSON-строкой в переменной окружения ADMIN_CONFIG_JSON
+    """Конфиг из config.json (или ADMIN_CONFIG_JSON), поверх — то, что сохранили в форме «Интеграции»."""
     if os.environ.get("ADMIN_CONFIG_JSON"):
-        return json.loads(os.environ["ADMIN_CONFIG_JSON"])
-    if CONFIG_PATH.exists():
-        return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-    return {}
+        cfg = json.loads(os.environ["ADMIN_CONFIG_JSON"])
+    elif CONFIG_PATH.exists():
+        cfg = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    else:
+        cfg = {}
+    try:
+        with db() as c:
+            stored = get_secret(c, "integrations") or {}
+    except Exception:  # noqa: BLE001 — база ещё не создана
+        stored = {}
+    for source, values in stored.items():
+        cfg[source] = {**cfg.get(source, {}), **values}
+    return cfg
+
+
+# Поля формы «Интеграции». True — секрет: в интерфейс не возвращается, только «задан / не задан».
+INTEGRATION_FIELDS = {
+    "getcourse": {"domain": False, "api_key": True, "since": False},
+    "instagram": {"user_id": False, "access_token": True, "since": False},
+    "telegram": {"api_id": False, "api_hash": True, "open_channel": False, "closed_channel": False, "since": False},
+}
+
+
+def get_secret(c, key):
+    r = c.execute("SELECT value FROM secrets WHERE key=?", (key,)).fetchone()
+    return json.loads(r["value"]) if r else None
+
+
+def set_secret(c, key, value):
+    if value is None:
+        c.execute("DELETE FROM secrets WHERE key=?", (key,))
+    else:
+        c.execute("INSERT INTO secrets(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                  (key, json.dumps(value, ensure_ascii=False)))
+
+
+def update_integration(c, source, values):
+    stored = get_secret(c, "integrations") or {}
+    section = stored.get(source, {})
+    for k, v in values.items():
+        if v is None or v == "":
+            section.pop(k, None)
+        else:
+            section[k] = v
+    stored[source] = section
+    set_secret(c, "integrations", stored)
 
 
 def get_settings(c):
@@ -946,12 +991,117 @@ def api_integrations(h):
         last = {}
         for r in rows(c.execute("SELECT * FROM sync_log ORDER BY id DESC LIMIT 60")):
             last.setdefault(r["source"], r)
-    return {
-        "base_url": cfg.get("base_url", ""),
-        "sources": {s: {"enabled": bool(cfg.get(s, {}).get("enabled")), "last": last.get(s)}
-                    for s in ("getcourse", "instagram", "telegram")},
-        "webhook": bool(cfg.get("getcourse", {}).get("webhook_token")),
-    }
+        cron_key = get_secret(c, "cron_key")
+        tg_pending = get_secret(c, "tg_pending")
+    sources = {}
+    for source, fields in INTEGRATION_FIELDS.items():
+        sec = cfg.get(source, {})
+        sources[source] = {
+            "enabled": bool(sec.get("enabled")),
+            "last": last.get(source),
+            "fields": {k: ({"set": bool(sec.get(k))} if secret else {"set": bool(sec.get(k)), "value": sec.get(k) or ""})
+                       for k, secret in fields.items()},
+        }
+    gc = cfg.get("getcourse", {})
+    tg = cfg.get("telegram", {})
+    sources["getcourse"]["webhook_token"] = gc.get("webhook_token") or ""
+    sources["telegram"]["logged_in"] = bool(tg.get("session"))
+    sources["telegram"]["account"] = tg.get("account_name") or ""
+    sources["telegram"]["pending"] = (tg_pending or {}).get("step")
+    return {"base_url": cfg.get("base_url", ""), "sources": sources, "cron_key": cron_key}
+
+
+@route("PUT", r"/api/integrations/(getcourse|instagram|telegram)")
+def api_integration_save(h, source):
+    b = h.body_json()
+    fields = INTEGRATION_FIELDS[source]
+    values = {}
+    for k, secret in fields.items():
+        if k not in b:
+            continue
+        v = str(b[k] or "").strip()
+        if secret and not v:
+            continue  # пустое поле секрета = «не менять»
+        values[k] = v
+    if "since" in values and values["since"]:
+        dt.date.fromisoformat(values["since"])
+    if source == "telegram" and values.get("api_id") and not values["api_id"].isdigit():
+        raise ApiError(400, "api_id состоит только из цифр")
+    if source == "instagram" and values.get("user_id") and not values["user_id"].isdigit():
+        raise ApiError(400, "ID аккаунта Instagram состоит только из цифр")
+    if "enabled" in b:
+        values["enabled"] = bool(b["enabled"]) or None
+    if source == "getcourse" and b.get("new_webhook_token"):
+        values["webhook_token"] = secrets.token_urlsafe(24)
+    with db() as c:
+        update_integration(c, source, values)
+    return api_integrations(h)
+
+
+@route("DELETE", r"/api/integrations/(getcourse|instagram|telegram)/([a-z_]+)")
+def api_integration_clear(h, source, field):
+    if field not in INTEGRATION_FIELDS[source]:
+        raise ApiError(400, "Неизвестное поле")
+    with db() as c:
+        update_integration(c, source, {field: None})
+    return api_integrations(h)
+
+
+# -- вход в Telegram прямо из админки
+
+@route("POST", "/api/telegram/code")
+def api_tg_code(h):
+    import integrations
+    phone = re.sub(r"[^\d+]", "", h.body_json().get("phone") or "")
+    if len(phone) < 10:
+        raise ApiError(400, "Введите номер телефона полностью, например +79991234567")
+    try:
+        pending = integrations.tg_send_code(load_config().get("telegram", {}), phone)
+    except Exception as e:  # noqa: BLE001
+        raise ApiError(400, f"Telegram не отправил код: {e}")
+    pending["step"] = "code"
+    with db() as c:
+        set_secret(c, "tg_pending", pending)
+    return {"ok": True, "message": "Код отправлен в Telegram этого аккаунта"}
+
+
+@route("POST", "/api/telegram/login")
+def api_tg_login(h):
+    import integrations
+    b = h.body_json()
+    with db() as c:
+        pending = get_secret(c, "tg_pending")
+    if not pending:
+        raise ApiError(400, "Сначала запросите код")
+    try:
+        r = integrations.tg_sign_in(load_config().get("telegram", {}), pending,
+                                    code=(b.get("code") or "").strip() or None, password=b.get("password") or None)
+    except Exception as e:  # noqa: BLE001
+        raise ApiError(400, f"Не удалось войти: {e}")
+    with db() as c:
+        if r.get("need_password"):
+            set_secret(c, "tg_pending", dict(pending, session=r["session"], step="password"))
+            return {"ok": False, "need_password": True}
+        set_secret(c, "tg_pending", None)
+        update_integration(c, "telegram", {"session": r["session"], "account_name": r["name"]})
+    return {"ok": True, "message": f"Подключён аккаунт {r['name']}"}
+
+
+@route("POST", "/api/telegram/logout")
+def api_tg_logout(h):
+    with db() as c:
+        set_secret(c, "tg_pending", None)
+        update_integration(c, "telegram", {"session": None, "account_name": None, "enabled": None})
+    return {"ok": True}
+
+
+@route("GET", "/api/telegram/channels")
+def api_tg_channels(h):
+    import integrations
+    try:
+        return {"channels": integrations.tg_channels(load_config().get("telegram", {}))}
+    except Exception as e:  # noqa: BLE001
+        raise ApiError(400, str(e))
 
 
 @route("POST", r"/api/sync/(getcourse|instagram|telegram)")
@@ -967,9 +1117,10 @@ def api_sync(h, source):
 def api_cron(h):
     """Запускает все включённые интеграции. Вызывает Vercel Cron (заголовок Authorization)
     или внешний планировщик вроде cron-job.org (параметр ?key=)."""
-    secret = os.environ.get("CRON_SECRET", "")
     given = (h.headers.get("Authorization") or "").replace("Bearer ", "", 1) or h.query.get("key", "")
-    if not secret or not hmac.compare_digest(given, secret):
+    with db() as c:
+        keys = [k for k in (os.environ.get("CRON_SECRET"), get_secret(c, "cron_key")) if k]
+    if not given or not any(hmac.compare_digest(given, k) for k in keys):
         raise ApiError(403, "Неверный ключ")
     return {k: {"ok": v[0], "message": v[1]} for k, v in sync_all().items()}
 
@@ -1027,12 +1178,6 @@ def main(argv):
     elif cmd == "sync":
         what = argv[2] if len(argv) > 2 else "all"
         print(sync_all() if what == "all" else run_sync(what))
-    elif cmd == "telegram-login":
-        import integrations
-        integrations.telegram_login(load_config())
-    elif cmd == "telegram-channels":
-        import integrations
-        integrations.telegram_channels(load_config())
     elif cmd == "reseed-plan":
         with db() as c:
             c.execute("DELETE FROM content_items")
@@ -1041,7 +1186,7 @@ def main(argv):
         print("Контент-план загружен заново из", PLAN_SEED.name)
     else:
         sys.exit("Команды: serve | adduser <почта> [имя] | sync [all|getcourse|instagram|telegram] | "
-                 "telegram-login | telegram-channels | reseed-plan")
+                 "reseed-plan")
 
 
 if __name__ == "__main__":

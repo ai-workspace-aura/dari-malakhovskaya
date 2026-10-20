@@ -135,3 +135,13 @@ summary{cursor:pointer;font-weight:500;font-size:14px}
 }
 table.t select.cellin{min-width:118px}
 table.t input.cellin[type=date]{min-width:128px}
+
+.ints{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.int .top2{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.int .field{width:100%}
+.int .row2{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.int .step{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin:16px 0 0}
+.int .status{font-size:13px;margin:4px 0 6px}
+.switch{display:inline-flex;gap:6px;align-items:center;font-size:14px;cursor:pointer;user-select:none}
+.switch input{accent-color:var(--acc);width:16px;height:16px}
+.btn:disabled,.field:disabled{opacity:.45;cursor:not-allowed}

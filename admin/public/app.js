@@ -542,21 +542,160 @@ async function loadSettings() {
   $('setMethods').value = (s.methods || []).join('\n');
   $('setFrom').value = s.period_from || '';
   $('setTo').value = s.period_to || '';
-  const r = await api('/api/integrations');
-  const names = {getcourse: 'GetCourse — заказы и оплаты', instagram: 'Instagram — сторис и рилс', telegram: 'Telegram — просмотры постов'};
-  $('intTable').innerHTML = `<table class="t"><thead><tr><th>Источник</th><th>Статус</th><th>Последняя синхронизация</th><th></th></tr></thead><tbody>
-    ${Object.entries(r.sources).map(([k, v]) => `<tr><td>${names[k]}</td>
-      <td>${v.enabled ? '<span class="badge ok">Включено</span>' : '<span class="badge">Не настроено</span>'}</td>
-      <td class="small">${v.last ? `<span class="badge ${v.last.ok ? 'ok' : 'bad'}">${v.last.ok ? 'OK' : 'Ошибка'}</span> ${esc(v.last.ts.replace('T', ' ').slice(0, 16))}<div class="mut">${esc(v.last.message)}</div>` : '<span class="mut">ещё не было</span>'}</td>
-      <td>${v.enabled ? `<button class="btn" data-sync="${k}">Обновить</button>` : ''}</td></tr>`).join('')}
-  </tbody></table>`;
-  $('intTable').querySelectorAll('[data-sync]').forEach(b => b.onclick = async () => {
-    try { const x = await api(`/api/sync/${b.dataset.sync}`, {method: 'POST'}); toast(x.message); } catch (e) { fail(e); }
+  renderIntegrations(await api('/api/integrations'));
+}
+
+// ---------- интеграции ----------
+
+const INT_TITLES = {getcourse: 'GetCourse — заказы и оплаты', instagram: 'Instagram — сторис и рилс', telegram: 'Telegram — просмотры постов'};
+
+function intStatus(src) {
+  const l = src.last;
+  if (!l) return '<div class="status mut">Синхронизаций ещё не было</div>';
+  return `<div class="status"><span class="badge ${l.ok ? 'ok' : 'bad'}">${l.ok ? 'OK' : 'Ошибка'}</span>
+    <span class="mut">${esc(l.ts.replace('T', ' ').slice(0, 16))}</span><div class="mut">${esc(l.message)}</div></div>`;
+}
+
+function intField(name, f, label, opts = {}) {
+  const secret = !('value' in f);
+  const ph = secret ? (f.set ? 'Сохранён. Вставьте новый, чтобы заменить' : 'Вставьте значение') : (opts.placeholder || '');
+  return `<label class="lbl">${label}${secret && f.set ? ' <span class="badge ok">задан</span>' : ''}</label>
+    <input class="field" data-k="${name}" type="${secret ? 'password' : (opts.type || 'text')}" autocomplete="off"
+      value="${secret ? '' : esc(f.value)}" placeholder="${esc(ph)}">${opts.hint ? `<div class="mut small" style="margin-top:4px">${opts.hint}</div>` : ''}`;
+}
+
+function intHead(key, src) {
+  return `<div class="top2"><h3 style="margin:0">${INT_TITLES[key]}</h3>
+    <label class="switch"><input type="checkbox" data-enable="${key}" ${src.enabled ? 'checked' : ''}>Включено</label></div>
+    ${intStatus(src)}`;
+}
+
+function renderIntegrations(r) {
+  const S = r.sources, base = r.base_url || location.origin;
+  const gc = S.getcourse, ig = S.instagram, tg = S.telegram;
+  const hook = gc.webhook_token
+    ? `<code>${esc(base)}/hooks/getcourse?token=${esc(gc.webhook_token)}&amp;id={object.id}&amp;status={object.status}&amp;cost={object.cost_money_value}&amp;payed={object.payed_money_value}&amp;email={object.user.email}&amp;client={object.user.first_name}&amp;tariff={object.positions}&amp;manager={object.manager.name}</code>
+       <div class="mut small" style="margin-top:4px">Точные названия переменных возьмите в редакторе процесса GetCourse.</div>`
+    : '<span class="mut small">Токен ещё не создан</span>';
+  const chSel = (name, label) => `<label class="lbl">${label}</label>
+    <select class="field" data-k="${name}"><option value="${esc(tg.fields[name].value)}">${esc(tg.fields[name].value || '— не выбран —')}</option></select>`;
+  let tgAccount;
+  if (tg.logged_in) {
+    tgAccount = `<div class="row2"><span>Подключён аккаунт <b>${esc(tg.account || '')}</b></span>
+      <button class="btn ghost danger" id="tgLogout">Отключить</button></div>`;
+  } else if (tg.pending === 'code' || tg.pending === 'password') {
+    const isPw = tg.pending === 'password';
+    tgAccount = `<div class="mut small" style="margin-top:6px">${isPw ? 'На аккаунте стоит облачный пароль Telegram — введите его.' : 'Код пришёл в Telegram этого аккаунта (сообщение от «Telegram»).'}</div>
+      <div class="row2"><input class="field" id="tgCode" type="${isPw ? 'password' : 'text'}" inputmode="${isPw ? 'text' : 'numeric'}" placeholder="${isPw ? 'Облачный пароль' : 'Код из Telegram'}" style="flex:1">
+      <button class="btn primary" id="tgLogin" data-pw="${isPw ? 1 : ''}">Войти</button><button class="btn ghost" id="tgRestart">Заново</button></div>`;
+  } else {
+    tgAccount = `<div class="row2"><input class="field" id="tgPhone" placeholder="+7 999 123-45-67" style="flex:1" ${tg.fields.api_hash.set ? '' : 'disabled'}>
+      <button class="btn" id="tgSend" ${tg.fields.api_hash.set ? '' : 'disabled'}>Получить код</button></div>
+      ${tg.fields.api_hash.set ? '' : '<div class="mut small">Сначала сохраните api_id и api_hash</div>'}`;
+  }
+
+  $('integrations').innerHTML = `<div class="ints">
+    <div class="card int" data-src="instagram">
+      ${intHead('instagram', ig)}
+      ${intField('user_id', ig.fields.user_id, 'ID аккаунта Instagram', {hint: 'Цифры рядом с аккаунтом в блоке «Создание маркеров доступа» (обычно начинаются с 1784…)'})}
+      ${intField('access_token', ig.fields.access_token, 'Маркер доступа (токен)', {hint: 'Действует 60 дней, потом создайте новый и вставьте сюда'})}
+      ${intField('since', ig.fields.since, 'Собирать рилс начиная с', {type: 'date'})}
+      <div class="row2"><button class="btn primary" data-save="instagram">Сохранить</button>
+        <button class="btn" data-sync="instagram" ${ig.enabled ? '' : 'disabled'}>Проверить и обновить</button></div>
+    </div>
+
+    <div class="card int" data-src="telegram">
+      ${intHead('telegram', tg)}
+      <div class="step">1. Ключи с my.telegram.org</div>
+      ${intField('api_id', tg.fields.api_id, 'api_id', {placeholder: 'Цифры'})}
+      ${intField('api_hash', tg.fields.api_hash, 'api_hash')}
+      <div class="row2"><button class="btn" data-save="telegram" data-only="api_id,api_hash">Сохранить ключи</button></div>
+      <div class="step">2. Аккаунт</div>
+      <div class="mut small">Отдельный аккаунт, подписанный на оба канала. Без прав админа — иначе админка откажется с ним работать.</div>
+      ${tgAccount}
+      <div class="step">3. Каналы</div>
+      ${chSel('open_channel', 'Открытый канал')}
+      ${chSel('closed_channel', 'Закрытый канал')}
+      ${intField('since', tg.fields.since, 'Собирать посты начиная с', {type: 'date'})}
+      <div class="row2"><button class="btn" id="tgLoad" ${tg.logged_in ? '' : 'disabled'}>Загрузить список каналов</button>
+        <button class="btn primary" data-save="telegram" data-only="open_channel,closed_channel,since">Сохранить каналы</button>
+        <button class="btn" data-sync="telegram" ${tg.enabled ? '' : 'disabled'}>Проверить и обновить</button></div>
+    </div>
+
+    <div class="card int" data-src="getcourse">
+      ${intHead('getcourse', gc)}
+      ${intField('domain', gc.fields.domain, 'Адрес школы', {placeholder: 'school.dari-malakhovskaya.ru'})}
+      ${intField('api_key', gc.fields.api_key, 'Ключ API', {hint: 'Если GetCourse даёт выбор — ключ «только для чтения»'})}
+      ${intField('since', gc.fields.since, 'Загружать заказы начиная с', {type: 'date'})}
+      <div class="row2"><button class="btn primary" data-save="getcourse">Сохранить</button>
+        <button class="btn" data-sync="getcourse" ${gc.enabled ? '' : 'disabled'}>Проверить и обновить</button></div>
+      <div class="step">Вебхук (необязательно)</div>
+      <div style="margin-top:6px">${hook}</div>
+      <div class="row2"><button class="btn ghost" id="gcHook">${gc.webhook_token ? 'Заменить токен' : 'Создать токен'}</button></div>
+    </div>
+
+    <div class="card int">
+      <h3>Обновление по расписанию</h3>
+      <p class="mut small" style="margin:0 0 8px">Vercel запускает сбор раз в день. Сторис живут 24 часа, поэтому добавьте на cron-job.org задание раз в час на этот адрес:</p>
+      <code>${esc(base)}/api/cron?key=${esc(r.cron_key || '')}</code>
+      <div class="row2"><button class="btn ghost" data-copy="${esc(base)}/api/cron?key=${esc(r.cron_key || '')}">Копировать</button></div>
+    </div>
+  </div>`;
+
+  const root = $('integrations');
+  const reload = async res => renderIntegrations(res || await api('/api/integrations'));
+  root.querySelectorAll('[data-save]').forEach(b => b.onclick = async () => {
+    const card = b.closest('[data-src]'), src = b.dataset.save;
+    const only = b.dataset.only ? b.dataset.only.split(',') : null;
+    const body = {};
+    card.querySelectorAll('[data-k]').forEach(i => { if (!only || only.includes(i.dataset.k)) body[i.dataset.k] = i.value; });
+    if (!only || only.includes('open_channel')) body.enabled = true;
+    try { await reload(await api(`/api/integrations/${src}`, {method: 'PUT', body})); toast('Сохранено'); } catch (e) { fail(e); }
   });
-  const base = r.base_url || location.origin;
-  $('intHint').innerHTML = `Ключи и токены хранятся в файле <code>config.json</code> на сервере, в интерфейс они не попадают. Как их получить, описано в README.<br>
-    Вебхук GetCourse (процесс по заказам → «Вызвать URL»), пример — точные переменные подставьте из редактора процесса: <code>${esc(base)}/hooks/getcourse?token=…&amp;id={object.id}&amp;status={object.status}&amp;cost={object.cost_money_value}&amp;payed={object.payed_money_value}&amp;client={object.user.first_name}&amp;email={object.user.email}&amp;tariff={object.positions}&amp;manager={object.manager.name}</code>
-    ${r.webhook ? '' : '<br><span class="badge warn">токен вебхука не задан</span>'}`;
+  root.querySelectorAll('[data-enable]').forEach(c => c.onchange = async () => {
+    try { await reload(await api(`/api/integrations/${c.dataset.enable}`, {method: 'PUT', body: {enabled: c.checked}})); } catch (e) { fail(e); }
+  });
+  root.querySelectorAll('[data-sync]').forEach(b => b.onclick = async () => {
+    b.disabled = true; b.textContent = 'Обновляю…';
+    try { const x = await api(`/api/sync/${b.dataset.sync}`, {method: 'POST'}); toast(x.message); } catch (e) { fail(e); }
+    setTimeout(() => reload().catch(fail), 1500);
+  });
+  root.querySelectorAll('[data-copy]').forEach(b => b.onclick = () =>
+    navigator.clipboard.writeText(b.dataset.copy).then(() => toast('Скопировано'), () => toast(b.dataset.copy)));
+  const on = (id, fn) => { const el = $(id); if (el) el.onclick = fn; };
+  on('gcHook', async () => {
+    if (r.sources.getcourse.webhook_token && !confirm('Старый адрес вебхука перестанет работать. Заменить?')) return;
+    try { await reload(await api('/api/integrations/getcourse', {method: 'PUT', body: {new_webhook_token: true}})); } catch (e) { fail(e); }
+  });
+  on('tgSend', async () => {
+    try { const x = await api('/api/telegram/code', {method: 'POST', body: {phone: $('tgPhone').value}}); toast(x.message); await reload(); } catch (e) { fail(e); }
+  });
+  on('tgLogin', async () => {
+    const pw = $('tgLogin').dataset.pw;
+    try {
+      const x = await api('/api/telegram/login', {method: 'POST', body: pw ? {password: $('tgCode').value} : {code: $('tgCode').value}});
+      if (x.message) toast(x.message);
+      await reload();
+    } catch (e) { fail(e); }
+  });
+  on('tgRestart', async () => { try { await api('/api/telegram/logout', {method: 'POST'}); await reload(); } catch (e) { fail(e); } });
+  on('tgLogout', async () => {
+    if (!confirm('Отключить аккаунт Telegram от админки?')) return;
+    try { await api('/api/telegram/logout', {method: 'POST'}); await reload(); } catch (e) { fail(e); }
+  });
+  on('tgLoad', async () => {
+    $('tgLoad').disabled = true; $('tgLoad').textContent = 'Загружаю…';
+    try {
+      const {channels} = await api('/api/telegram/channels');
+      root.querySelectorAll('[data-src="telegram"] select[data-k]').forEach(sel => {
+        const cur = sel.value;
+        sel.innerHTML = '<option value="">— не выбран —</option>' + channels.map(c =>
+          `<option value="${esc(c.ref)}" ${c.admin ? 'disabled' : ''} ${c.ref === cur ? 'selected' : ''}>${esc(c.title)}${c.admin ? ' — вы админ, нельзя' : ''}</option>`).join('');
+      });
+      toast(channels.length ? `Каналов: ${channels.length}. Выберите и сохраните` : 'Аккаунт не подписан ни на один канал');
+    } catch (e) { fail(e); }
+    $('tgLoad').disabled = false; $('tgLoad').textContent = 'Загрузить список каналов';
+  });
 }
 
 $('setSave').onclick = async () => {
