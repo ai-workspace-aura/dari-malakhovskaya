@@ -600,7 +600,8 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch(self, method):
         parsed = urllib.parse.urlparse(self.path)
         self.query = {k: v[0] for k, v in urllib.parse.parse_qs(parsed.query).items()}
-        path = parsed.path
+        # на Vercel все запросы приходят в /api/index, исходный путь передаёт rewrite в __path
+        path = self.query.pop("__path", None) or parsed.path
         try:
             if ON_VERCEL and not DATABASE_URL:
                 raise ApiError(503, "База не подключена: в Vercel откройте Storage и подключите Neon (Postgres)")
