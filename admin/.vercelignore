@@ -1,0 +1,4 @@
+data/admin.db*
+config.json
+.dev-credentials
+__pycache__/

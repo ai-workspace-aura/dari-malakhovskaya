@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Союз · админка</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div id="loginView" class="login" hidden>
+  <h1 style="margin-bottom:24px">Вход</h1>
+  <form id="loginForm">
+    <input class="field" name="email" type="email" placeholder="Почта" autocomplete="username" required>
+    <input class="field" name="password" type="password" placeholder="Пароль" autocomplete="current-password" required>
+    <div class="err" id="loginErr"></div>
+    <button class="btn primary" type="submit">Войти</button>
+  </form>
+</div>
+
+<main id="appView" hidden>
+  <div class="top">
+    <h1>Союз с собой · 5 сезон</h1>
+    <div class="who"><span id="whoName"></span><button class="btn ghost" id="logout">Выйти</button></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="plan">Контент-план</button>
+    <button class="tab" data-tab="stats">Статистика</button>
+    <button class="tab" data-tab="fin">Финансы</button>
+    <button class="tab" data-tab="settings">Настройки</button>
+  </div>
+
+  <!-- Контент-план -->
+  <section class="panel active" id="panel-plan">
+    <div class="toolbar">
+      <button class="btn" id="calPrev" aria-label="Предыдущий месяц">‹</button>
+      <div class="month" id="calMonth"></div>
+      <button class="btn" id="calNext" aria-label="Следующий месяц">›</button>
+      <button class="btn ghost" id="calToday">Сегодня</button>
+      <div class="grow"></div>
+      <div class="chips" id="chFilter"></div>
+      <select class="field" id="planView">
+        <option value="cal">Календарь</option>
+        <option value="list">Список</option>
+      </select>
+    </div>
+    <div id="planBody"></div>
+    <div class="legend">
+      <span><i class="st planned"></i>Запланировано</span>
+      <span><i class="st in_work"></i>В работе</span>
+      <span><i class="st ready"></i>Готово</span>
+      <span><i class="st published"></i>Опубликовано</span>
+    </div>
+  </section>
+
+  <!-- Статистика -->
+  <section class="panel" id="panel-stats">
+    <div class="toolbar">
+      <span class="mut small">Период</span>
+      <input class="field" type="date" id="stFrom">
+      <span class="mut">—</span>
+      <input class="field" type="date" id="stTo">
+      <button class="btn ghost" data-preset="launch">Весь запуск</button>
+      <button class="btn ghost" data-preset="7">7 дней</button>
+      <button class="btn ghost" data-preset="today">Сегодня</button>
+    </div>
+    <div class="funnels" id="funnels"></div>
+
+    <h2>По дням</h2>
+    <div class="toolbar"><div class="chips" id="stChannel"></div></div>
+    <div class="note-card">Пустое поле подставляет значение автоматически: из интеграций, из опубликованных единиц контент-плана и из трекинг-ссылок. Если вписать число руками, оно заменит автоматическое и выделится цветом. Чтобы вернуть автоматическое значение, сотрите число.</div>
+    <div class="tablewrap" id="stTable"></div>
+
+    <h2>Трекинг-ссылки</h2>
+    <div class="note-card">Ставьте короткую ссылку вместо прямой: каждый переход по ней засчитается каналу и дню публикации. Переадресация ведёт на исходную ссылку. Добавьте к ней UTM-метки, тогда GetCourse тоже увидит источник.</div>
+    <form class="form-row" id="linkForm">
+      <input class="field" name="target" placeholder="Куда ведёт ссылка (https://…)" style="flex:2;min-width:220px" required>
+      <select class="field" name="channel" id="linkChannel" required></select>
+      <input class="field" name="date" type="date" title="День публикации">
+      <input class="field" name="slug" placeholder="Короткое имя (необязательно)" style="width:200px">
+      <input class="field" name="note" placeholder="Комментарий" style="flex:1;min-width:140px">
+      <button class="btn primary" type="submit">Создать</button>
+    </form>
+    <div class="tablewrap" id="linksTable"></div>
+  </section>
+
+  <!-- Финансы -->
+  <section class="panel" id="panel-fin">
+    <div class="fact">
+      <div><label for="finPlan">План по выручке, ₽</label><input id="finPlan" inputmode="numeric"></div>
+      <div><label>Текущая выручка, ₽</label><span class="factval" id="finRev"></span></div>
+      <div><label>Выполнение плана</label><span class="factval" id="finPct"></span></div>
+      <div><label>Кол-во оплат</label><span class="factval" id="finCnt"></span></div>
+      <div><label>Средний чек, ₽</label><span class="factval" id="finAvg"></span></div>
+    </div>
+    <div class="bar"><i id="finBar" style="width:0"></i></div>
+    <p class="mut small" style="margin:0 0 8px">В выручку идёт колонка «Оплачено» у всех заказов, кроме отменённых и возвратов.</p>
+
+    <h2>Оплаты</h2>
+    <div class="toolbar">
+      <input class="field" id="payQ" placeholder="Поиск по клиенту, почте, номеру" style="min-width:220px;flex:1">
+      <select class="field" id="payStatus"><option value="">Все статусы</option></select>
+      <select class="field" id="payManager"><option value="">Все менеджеры</option></select>
+      <select class="field" id="payTariff"><option value="">Все тарифы</option></select>
+      <button class="btn" id="payImport">Импорт CSV из GetCourse</button>
+      <input type="file" id="payFile" accept=".csv,.txt,text/csv" hidden>
+      <button class="btn primary" id="payAdd">+ Оплата</button>
+    </div>
+    <div class="tablewrap" id="payTable"></div>
+
+    <h2>Разбивка</h2>
+    <div class="grid2" id="finBy"></div>
+  </section>
+
+  <!-- Настройки -->
+  <section class="panel" id="panel-settings">
+    <h2 style="margin-top:0">Справочники</h2>
+    <div class="grid2">
+      <div class="card"><h3>Кто закрывает клиентов</h3><p class="mut small" style="margin:0 0 6px">По одному имени в строке</p><textarea class="field" id="setManagers" rows="5"></textarea></div>
+      <div class="card"><h3>Тарифы</h3><p class="mut small" style="margin:0 0 6px">По одному в строке</p><textarea class="field" id="setTariffs" rows="5"></textarea></div>
+      <div class="card"><h3>Способы оплаты</h3><p class="mut small" style="margin:0 0 6px">По одному в строке</p><textarea class="field" id="setMethods" rows="5"></textarea></div>
+    </div>
+    <div class="form-row" style="margin-top:12px">
+      <span class="mut small">Период статистики по умолчанию</span>
+      <input class="field" type="date" id="setFrom"><span class="mut">—</span><input class="field" type="date" id="setTo">
+      <button class="btn primary" id="setSave">Сохранить</button>
+    </div>
+
+    <h2>Интеграции</h2>
+    <div class="tablewrap" id="intTable"></div>
+    <div class="note-card" id="intHint"></div>
+  </section>
+</main>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="День контент-плана"></aside>
+<div class="toast" id="toast"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

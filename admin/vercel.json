@@ -1,0 +1,16 @@
+{
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "{server.py,integrations.py,data/content-plan-v3.json}",
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    {"source": "/api/:path*", "destination": "/api/index"},
+    {"source": "/go/:path*", "destination": "/api/index"},
+    {"source": "/hooks/:path*", "destination": "/api/index"}
+  ],
+  "crons": [
+    {"path": "/api/cron", "schedule": "0 5 * * *"}
+  ]
+}

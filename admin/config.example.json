@@ -1,0 +1,33 @@
+{
+  "base_url": "https://admin.example.ru",
+  "host": "127.0.0.1",
+  "port": 8787,
+  "sync_interval_minutes": 60,
+
+  "getcourse": {
+    "enabled": false,
+    "domain": "school.dari-malakhovskaya.ru",
+    "api_key": "СЕКРЕТНЫЙ_КЛЮЧ_API",
+    "since": "2026-10-01",
+    "webhook_token": "длинная-случайная-строка"
+  },
+
+  "instagram": {
+    "enabled": false,
+    "graph_host": "graph.instagram.com",
+    "version": "v21.0",
+    "user_id": "ID_ИНСТАГРАМ_АККАУНТА",
+    "access_token": "ДОЛГОСРОЧНЫЙ_ТОКЕН",
+    "since": "2026-10-17"
+  },
+
+  "telegram": {
+    "enabled": false,
+    "api_id": "12345",
+    "api_hash": "ХЕШ_С_my.telegram.org",
+    "session": "СТРОКА_ИЗ_python3 server.py telegram-login",
+    "open_channel": "@username_открытого_канала",
+    "closed_channel": "-100XXXXXXXXXX",
+    "since": "2026-10-17"
+  }
+}
