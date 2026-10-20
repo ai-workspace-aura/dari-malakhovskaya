@@ -602,6 +602,8 @@ class Handler(BaseHTTPRequestHandler):
         self.query = {k: v[0] for k, v in urllib.parse.parse_qs(parsed.query).items()}
         path = parsed.path
         try:
+            if ON_VERCEL and not DATABASE_URL:
+                raise ApiError(503, "База не подключена: в Vercel откройте Storage и подключите Neon (Postgres)")
             init_db()
             for m, rx, fn, auth in ROUTES:
                 mt = rx.match(path)
