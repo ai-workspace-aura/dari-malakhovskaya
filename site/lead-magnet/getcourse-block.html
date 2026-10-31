@@ -100,7 +100,7 @@
   .ds .offer-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:of}
   .ds .offer-cards li{counter-increment:of;display:flex;flex-direction:column;gap:18px;padding:26px 26px 28px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark)}
   .ds .offer-cards li::before{content:"0" counter(of);font:400 12px/1 var(--display);letter-spacing:.06em;color:var(--sand)}
-  .ds .offer-cards b{font:400 clamp(20px,1.8vw,26px)/1.05 var(--display);letter-spacing:-.03em;text-transform:uppercase;color:#fff}
+  .ds .offer-cards b{font:400 clamp(18px,1.5vw,22px)/1.2 var(--display);letter-spacing:-.03em;color:#fff;text-wrap:balance}
 
   /* Плашка «70% мест прошлого потока» */
   .ds .proof{display:grid;grid-template-columns:auto 1fr;gap:36px;align-items:center;max-width:1080px;margin:12px auto 0;padding:32px 40px;border-radius:var(--r);background:var(--esp);color:#fff}
@@ -245,7 +245,7 @@
   html.is-phone .ds .offer-lead{margin:36px auto 16px}
   html.is-phone .ds .offer-cards{grid-template-columns:1fr;gap:10px}
   html.is-phone .ds .offer-cards li{flex-direction:row;align-items:baseline;gap:14px;padding:18px 20px}
-  html.is-phone .ds .offer-cards b{font-size:20px}
+  html.is-phone .ds .offer-cards b{font-size:18px}
   html.is-phone .ds .proof{grid-template-columns:1fr;gap:14px;padding:28px 20px;text-align:center}
   html.is-phone .ds .proof-num{font-size:72px}
   html.is-phone .ds .theme{padding:56px 0;text-align:center}
@@ -412,14 +412,14 @@
   <section class="offer on-dark" id="offer">
     <div class="col">
       <div class="offer-bar rv">
-        <b>Первые 200 мест забирают лучшие условия</b>
+        <b>Первые 200 мест забирают</b>
         <div class="offer-chips"><span>Лучшие цены и условия</span><span>Эксклюзивные подарки</span></div>
       </div>
-      <p class="offer-lead rv">Анкета предзаписи — единственная возможность до официального старта продаж:</p>
+      <p class="offer-lead rv">Что даёт анкета предзаписи</p>
       <ol class="offer-cards">
-        <li class="rv"><b>Получить самую низкую цену</b></li>
-        <li class="rv"><b>Забрать лучшие условия</b></li>
-        <li class="rv"><b>Забрать подарки</b></li>
+        <li class="rv"><b>Единственная возможность получить самую низкую цену и забрать лучшие условия ДО официального старта продаж</b></li>
+        <li class="rv"><b>Вход в закрытый канал с 3 живыми эфирами и серией эксклюзивных подкастов лично от меня</b></li>
+        <li class="rv"><b>Бонусный урок про то, как перестать искать у других разрешение на свою жизнь</b></li>
       </ol>
     </div>
   </section>
