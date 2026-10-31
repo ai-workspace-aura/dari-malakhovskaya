@@ -105,6 +105,25 @@
   .ds .theme-note{max-width:44em;padding:18px 26px;border-radius:16px;background:var(--glow);border:1px solid var(--tag-line);font:400 clamp(17px,1.45vw,20px)/1.25 var(--display);letter-spacing:-.02em;color:#fff}
 
   /* Что даёт предзапись — сетка бонусов, как на старом сайте */
+  /* Плашки предзаписи: 200 мест и три выгоды до старта продаж */
+  .ds .offer{position:relative;padding:0 0 88px;background:var(--esp);color:#fff}
+  .ds .offer-bar{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 32px;border-radius:var(--r);background:var(--g)}
+  .ds .offer-bar b{font:400 clamp(22px,2.1vw,30px)/1.05 var(--display);letter-spacing:-.03em;text-transform:uppercase;color:#fff}
+  .ds .offer-chips{display:flex;flex:none;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+  .ds .offer-chips span{padding:9px 14px;border-radius:99px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);font:400 14px/1 var(--display);letter-spacing:-.01em;color:#fff;white-space:nowrap}
+  .ds .offer-lead{max-width:30em;margin:56px auto 22px;text-align:center;font:400 clamp(18px,1.6vw,22px)/1.2 var(--display);letter-spacing:-.03em;color:var(--sand);text-wrap:balance}
+  .ds .offer-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:of}
+  .ds .offer-cards li{counter-increment:of;display:flex;flex-direction:column;gap:18px;padding:26px 26px 28px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark)}
+  .ds .offer-cards li::before{content:"0" counter(of);font:400 12px/1 var(--display);letter-spacing:.06em;color:var(--sand)}
+  .ds .offer-cards b{font:400 clamp(20px,1.8vw,26px)/1.05 var(--display);letter-spacing:-.03em;text-transform:uppercase;color:#fff}
+
+  /* Плашка «70% мест прошлого потока» */
+  .ds .proof{display:grid;grid-template-columns:auto 1fr;gap:36px;align-items:center;max-width:1080px;margin:12px auto 0;padding:32px 40px;border-radius:var(--r);background:var(--esp);color:#fff}
+  .ds .proof-num{font:400 clamp(72px,7.4vw,112px)/.85 var(--display);letter-spacing:-.04em;color:var(--sand)}
+  .ds .proof b{display:block;font:400 clamp(20px,1.8vw,26px)/1.15 var(--display);letter-spacing:-.03em;color:#fff}
+  .ds .proof p{margin-top:12px;font-size:15px;line-height:1.45;color:var(--on-dark)}
+  .ds .proof p strong{color:#fff}
+
   .ds .get{padding:120px 0;background:var(--paper)}
   .ds .get-head{display:grid;justify-items:center;gap:26px;margin-bottom:44px;text-align:center}
   .ds .get-head .h2{max-width:18em}
@@ -168,7 +187,7 @@
   /* «Ты всё успеваешь» — плашка, фото, плашка; путь; финал. Как на старом сайте */
   .ds .stream{padding:120px 0 120px;background:var(--esp);color:#fff}
   .ds .stream-title{max-width:14em;margin:0 auto 48px}
-  .ds .stream-stage{display:grid;grid-template-columns:1.05fr .82fr 1.05fr;gap:14px;align-items:stretch}
+  .ds .stream-stage{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
   .ds .plaque{display:flex;flex-direction:column;gap:20px;padding:32px 28px;border-radius:24px;background:var(--glow);border:1px solid var(--hair-dark)}
   .ds .plaque h2{font:400 clamp(28px,2.6vw,38px)/1 var(--display);letter-spacing:-.035em;color:#fff}
   .ds .plaque p{font-size:14px;line-height:1.45;color:var(--on-dark)}
@@ -183,8 +202,9 @@
   .ds .pairs p{margin-top:10px;font-size:13px;line-height:1.45;color:rgba(255,255,255,.55)}
   /* Подложка как у «Итог дня» */
   .ds .plaque .gone{margin-top:auto;padding:20px 22px;border-radius:14px;background:var(--stone);font:400 clamp(18px,1.6vw,22px)/1.15 var(--display);letter-spacing:-.03em;color:var(--ink)}
-  .ds .stream-photo{position:relative;min-height:520px;border-radius:24px;overflow:hidden;background:var(--cocoa)}
-  .ds .stream-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%}
+  /* Фото — внутри плашки «Союз с собой — это десять недель со мной», над текстом */
+  .ds .stream-photo{position:relative;align-self:flex-start;width:50%;aspect-ratio:1/1;margin-bottom:6px;border-radius:16px;overflow:hidden;background:var(--cocoa)}
+  .ds .stream-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%}
 
   .ds .prog-map{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:24px;margin-top:72px}
   .ds .prog-map::before{content:"";position:absolute;top:6px;left:4%;right:4%;height:1px;background:linear-gradient(90deg,transparent,var(--sand) 12%,var(--sand) 88%,transparent)}
@@ -221,8 +241,6 @@
 
   /* Планшет */
   @media (max-width:1180px){
-    html:not(.is-phone) .ds .stream-stage{grid-template-columns:1fr 1fr}
-    html:not(.is-phone) .ds .stream-photo{grid-column:span 2;grid-row:1;min-height:420px}
     html:not(.is-phone) .ds .close-row{grid-template-columns:.8fr 1.2fr}
     html:not(.is-phone) .ds .close-right{grid-column:2}
   }
@@ -238,6 +256,16 @@
   html.is-phone .ds .hero-cta .btn{width:100%;min-width:0}
   html.is-phone .ds .hero-gift{max-width:none}
   html.is-phone .ds .hero-photo{min-height:0;aspect-ratio:3/4;max-height:560px}
+  html.is-phone .ds .offer{padding:0 0 56px}
+  html.is-phone .ds .offer-bar{flex-direction:column;align-items:stretch;gap:16px;padding:22px 20px;text-align:center}
+  html.is-phone .ds .offer-chips{justify-content:center}
+  html.is-phone .ds .offer-chips span{font-size:13px}
+  html.is-phone .ds .offer-lead{margin:36px auto 16px}
+  html.is-phone .ds .offer-cards{grid-template-columns:1fr;gap:10px}
+  html.is-phone .ds .offer-cards li{flex-direction:row;align-items:baseline;gap:14px;padding:18px 20px}
+  html.is-phone .ds .offer-cards b{font-size:20px}
+  html.is-phone .ds .proof{grid-template-columns:1fr;gap:14px;padding:28px 20px;text-align:center}
+  html.is-phone .ds .proof-num{font-size:72px}
   html.is-phone .ds .theme{padding:56px 0;text-align:center}
   html.is-phone .ds .theme .col{grid-template-columns:1fr;gap:18px}
   html.is-phone .ds .theme-head{justify-items:center}
@@ -260,7 +288,7 @@
   .ds .m-br{display:none}
   html.is-phone .ds .m-br{display:inline}
   html.is-phone .ds .plaque .gone{width:100%}
-  html.is-phone .ds .stream-photo{min-height:0;aspect-ratio:1/1;max-height:420px}
+  html.is-phone .ds .stream-photo{align-self:stretch;width:auto;aspect-ratio:4/3;border-radius:14px}
   html.is-phone .ds .prog-map{grid-template-columns:1fr;gap:0;margin-top:56px}
   html.is-phone .ds .prog-map::before{display:none}
   html.is-phone .ds .prog-map li{padding:0 0 26px 34px}
@@ -359,6 +387,24 @@
   #anketa .gc-widget .f-input-wrapper[data-type="checkbox"] .field-description-block a{
     color:#6B3FA0!important;text-decoration:underline!important;text-decoration-thickness:1px!important;text-underline-offset:2px;cursor:pointer;
   }
+  /* Мини-квалификация: готовность и канал связи. Поля «один из списка» добавляются в форму GetCourse */
+  #anketa .gc-widget .f-input-wrapper[data-type="radio"]{display:block!important;margin:4px 0 14px!important}
+  #anketa .gc-widget .f-input-wrapper[data-type="radio"]>.field-label,
+  #anketa .gc-widget .f-input-wrapper[data-type="radio"]>.q{display:block!important;margin:0 0 10px!important;color:#1A1A1A!important;font:400 15px/1.3 "Tenor Sans",Georgia,serif!important;letter-spacing:-.02em}
+  #anketa .gc-widget label:has(>input[type="radio"]){
+    display:flex!important;align-items:center!important;gap:10px!important;min-height:48px;margin:0 0 8px!important;padding:12px 14px!important;
+    border:1px solid #E2DCE8!important;border-radius:10px!important;background:#fff!important;cursor:pointer;
+    color:#1A1A1A!important;font:400 14px/1.35 "Graphik LCG","GraphikLCG","Inter",Arial,sans-serif!important;transition:border-color .18s ease,background .18s ease;
+  }
+  #anketa .gc-widget label:has(>input[type="radio"]:checked){border-color:#6B3FA0!important;background:#F3ECFA!important}
+  #anketa .gc-widget input[type="radio"]{flex:0 0 18px!important;width:18px!important;height:18px!important;margin:0!important;accent-color:#6B3FA0;cursor:pointer}
+  #anketa .gc-widget .radio-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  #anketa .gc-widget .radio-row label{margin:0!important}
+  #anketa .gc-widget select{
+    display:block!important;width:100%!important;min-height:56px!important;padding:14px 16px!important;border:1px solid #E2DCE8!important;border-radius:10px!important;
+    background:#fff!important;color:#1A1A1A!important;font:400 15px/1.4 "Graphik LCG","GraphikLCG","Inter",Arial,sans-serif!important;box-shadow:none!important;outline:none!important;
+  }
+  #anketa .gc-widget select:focus{border-color:#6B3FA0!important;box-shadow:0 0 0 3px rgba(107,63,160,.14)!important}
   #anketa .gc-widget #ltBlock2256884606 .form-result-block:empty{display:none}
 </style>
 
@@ -387,6 +433,22 @@
           <span>Шесть лет я работаю с женщинами, у которых снаружи всё держится, а внутри себя они почти не чувствуют.</span>
         </figcaption>
       </figure>
+    </div>
+  </section>
+
+  <!-- ПЛАШКИ ПРЕДЗАПИСИ: цифры 200 мест — на согласование -->
+  <section class="offer on-dark" id="offer">
+    <div class="col">
+      <div class="offer-bar rv">
+        <b>Первые 200 мест забирают лучшие условия</b>
+        <div class="offer-chips"><span>Лучшие цены и условия</span><span>Эксклюзивные подарки</span></div>
+      </div>
+      <p class="offer-lead rv">Анкета предзаписи — единственная возможность до официального старта продаж:</p>
+      <ol class="offer-cards">
+        <li class="rv"><b>Получить самую низкую цену</b></li>
+        <li class="rv"><b>Забрать лучшие условия</b></li>
+        <li class="rv"><b>Забрать подарки</b></li>
+      </ol>
     </div>
   </section>
 
@@ -444,6 +506,15 @@
           <h3>Место в VIP-группе</h3>
           <p>Успей занять одно из 30 мест в группе лично с Дари.</p>
         </article>
+      </div>
+
+      <!-- ПЛАШКА 70%: цифра на согласование -->
+      <div class="proof rv">
+        <span class="proof-num">70%</span>
+        <div>
+          <b>мест прошлого потока раскупили ещё до официального старта продаж</b>
+          <p>Анкета предзаписи — <strong>единственная гарантия места</strong> на новом потоке по лучшей цене.</p>
+        </div>
       </div>
 
       <div class="get-cta rv">
@@ -528,6 +599,9 @@
       <h2 class="h2 center stream-title rv">Ты всё успеваешь, а тебя в этом дне почти нет</h2>
       <div class="stream-stage">
         <article class="plaque rv">
+          <figure class="stream-photo">
+            <img src="https://fs.getcourse.ru/fileservice/file/download/a/755586/sc/333/h/479244bad0d8f0ccc7ddea5a6a44835c.jpg" alt="Дари" width="735" height="735" loading="lazy">
+          </figure>
           <h2>Союз с собой — это десять недель со мной</h2>
           <div class="chips">
             <span>всё делаешь и не чувствуешь</span>
@@ -536,9 +610,6 @@
           </div>
           <p>Я не читаю лекции. На этих неделях ты замечаешь, где телу тесно, и отличаешь своё желание от долга. Желание доходит до дела, а дело получает цену.</p>
         </article>
-        <figure class="stream-photo rv">
-          <img src="https://fs.getcourse.ru/fileservice/file/download/a/755586/sc/333/h/479244bad0d8f0ccc7ddea5a6a44835c.jpg" alt="Дари" width="735" height="735" loading="lazy">
-        </figure>
         <article class="plaque rv">
           <p class="k">К вечеру сил нет</p>
           <ol class="pairs">
@@ -617,6 +688,133 @@
     <div class="gc-widget" id="gc-widget"></div>
   </div>
 </div>
+<!-- ПОП-АП: появляется один раз за визит — через 25 секунд или когда курсор уходит к закрытию вкладки (на телефоне — при прокрутке назад после половины страницы).
+     Кнопка открывает ту же анкету предзаписи. Таймер считает до первого эфира: дату меняют в data-deadline. -->
+<style>
+  #promo{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:16px}
+  #promo[hidden]{display:none!important}
+  #promo .promo-dim{position:absolute;inset:0;background:rgba(17,17,17,.62);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:promoFade .3s ease both}
+  #promo .promo-card{
+    position:relative;width:min(480px,100%);max-height:calc(100vh - 32px);max-height:calc(100svh - 32px);overflow:auto;
+    padding:40px 36px 32px;border-radius:20px;border:1px solid rgba(201,166,232,.2);
+    background:radial-gradient(80% 55% at 50% 0%,rgba(107,63,160,.45),rgba(107,63,160,0) 100%),#1A1A1A;
+    color:#fff;text-align:center;font:400 14px/1.45 "Graphik LCG","GraphikLCG","Inter",Arial,sans-serif;letter-spacing:-.02em;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);animation:promoUp .45s cubic-bezier(.23,1,.32,1) both
+  }
+  #promo *{box-sizing:border-box;margin:0;padding:0}
+  #promo .promo-x{position:absolute;top:12px;right:12px;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;font:300 22px/36px Arial,sans-serif;cursor:pointer;transition:background .2s}
+  #promo .promo-x:hover{background:rgba(255,255,255,.16)}
+  #promo .promo-eyebrow{font:400 12px/1.4 "Tenor Sans",Georgia,serif;letter-spacing:.06em;text-transform:uppercase;color:#C9A6E8}
+  #promo .promo-title{margin-top:14px;font:400 clamp(28px,3.4vw,36px)/1 "Tenor Sans",Georgia,serif;letter-spacing:-.03em;text-transform:uppercase;color:#C9A6E8}
+  #promo .promo-sub{margin-top:14px;font-size:14px;color:rgba(255,255,255,.6);text-wrap:balance}
+  #promo .promo-list{margin-top:24px;padding:6px 20px;border-radius:14px;background:rgba(201,166,232,.08);border:1px solid rgba(201,166,232,.16);list-style:none;text-align:left;counter-reset:pp}
+  #promo .promo-list li{position:relative;counter-increment:pp;padding:12px 0 12px 34px;border-top:1px solid rgba(201,166,232,.14);color:rgba(255,255,255,.72)}
+  #promo .promo-list li:first-child{border-top:0}
+  #promo .promo-list li::before{content:"0" counter(pp);position:absolute;left:0;top:14px;font:400 12px/1 "Tenor Sans",Georgia,serif;color:#C9A6E8}
+  #promo .promo-list b{font-weight:400;color:#fff}
+  #promo .promo-timer{margin-top:24px}
+  #promo .promo-timer[hidden]{display:none}
+  #promo .promo-timer-label{font:400 12px/1.4 "Tenor Sans",Georgia,serif;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+  #promo .promo-clock{display:flex;justify-content:center;gap:8px;margin-top:10px}
+  #promo .promo-clock div{min-width:62px;padding:10px 4px 8px;border-radius:10px;background:rgba(255,255,255,.06)}
+  #promo .promo-clock b{display:block;font:400 28px/1 "Tenor Sans",Georgia,serif;font-variant-numeric:tabular-nums;letter-spacing:-.02em;color:#fff}
+  #promo .promo-clock span{display:block;margin-top:6px;font-size:11px;color:rgba(255,255,255,.45)}
+  #promo .promo-btn{
+    display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:56px;margin-top:24px;padding:0 24px;
+    border:1px solid #6B3FA0;border-radius:8px;background:#6B3FA0;color:#fff;cursor:pointer;
+    font:400 15px/1.1 "Tenor Sans",Georgia,serif;letter-spacing:-.02em;
+    transition:background .25s cubic-bezier(.23,1,.32,1),border-color .25s cubic-bezier(.23,1,.32,1),transform .25s cubic-bezier(.23,1,.32,1)
+  }
+  #promo .promo-btn:hover{background:#3E2468;border-color:#3E2468;transform:translateY(-1px)}
+  #promo .promo-btn svg{width:16px;height:16px;flex:none}
+  html.is-phone #promo{padding:12px}
+  html.is-phone #promo .promo-card{padding:36px 20px 22px;border-radius:16px}
+  html.is-phone #promo .promo-title{font-size:26px}
+  html.is-phone #promo .promo-list{padding:4px 16px}
+  html.is-phone #promo .promo-list li{padding:10px 0 10px 30px;font-size:13px}
+  html.is-phone #promo .promo-list li::before{top:12px}
+  html.is-phone #promo .promo-clock div{min-width:0;flex:1}
+  html.is-phone #promo .promo-clock b{font-size:24px}
+  @keyframes promoFade{from{opacity:0}}
+  @keyframes promoUp{from{opacity:0;transform:translateY(16px) scale(.98)}}
+  body.promo-open{overflow:hidden}
+</style>
+<div id="promo" hidden aria-hidden="true" data-deadline="2026-11-15T18:00:00+03:00">
+  <div class="promo-dim" data-promo-close></div>
+  <div class="promo-card" role="dialog" aria-modal="true" aria-labelledby="promo-title" tabindex="-1">
+    <button class="promo-x" type="button" data-promo-close aria-label="Закрыть окно">×</button>
+    <p class="promo-eyebrow">Только в предзаписи</p>
+    <h2 class="promo-title" id="promo-title">Три дня эфиров лично со мной</h2>
+    <p class="promo-sub">15, 16 и 17 ноября в 18:00 по Москве. ссылка будет только у тех, кто заполнил анкету.</p>
+    <ol class="promo-list">
+      <li><b>Трёхдневные эфиры</b> «Либидо жизни». вживую, с разборами</li>
+      <li><b>Бонусный урок</b> «Как перестать искать у других разрешение на свою жизнь»</li>
+      <li><b>Специальные бонусы до 10 000 ₽</b> и самые низкие цены на 5 сезон</li>
+    </ol>
+    <div class="promo-timer" id="promo-timer">
+      <p class="promo-timer-label">До первого эфира</p>
+      <div class="promo-clock" aria-live="off">
+        <div><b data-t="d">00</b><span>дней</span></div>
+        <div><b data-t="h">00</b><span>часов</span></div>
+        <div><b data-t="m">00</b><span>минут</span></div>
+        <div><b data-t="s">00</b><span>секунд</span></div>
+      </div>
+    </div>
+    <button class="promo-btn" type="button" data-open data-promo-close>Заполнить анкету предзаписи
+      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+<script>
+(function(){
+  var promo=document.getElementById("promo");
+  if(!promo)return;
+  var KEY="dsPromoShown";
+  var deadline=new Date(promo.getAttribute("data-deadline")).getTime();
+  var timerBox=document.getElementById("promo-timer");
+  var cells={};promo.querySelectorAll("[data-t]").forEach(function(el){cells[el.getAttribute("data-t")]=el;});
+  var tick=null,armed=true;
+  function seen(){try{return sessionStorage.getItem(KEY)==="1";}catch(e){return false;}}
+  function remember(){try{sessionStorage.setItem(KEY,"1");}catch(e){}}
+  function pad(n){return(n<10?"0":"")+n;}
+  function render(){
+    var left=Math.max(0,Math.floor((deadline-Date.now())/1000));
+    if(!left||isNaN(left)){timerBox.hidden=true;if(tick)clearInterval(tick);return;}
+    cells.d.textContent=pad(Math.floor(left/86400));
+    cells.h.textContent=pad(Math.floor(left%86400/3600));
+    cells.m.textContent=pad(Math.floor(left%3600/60));
+    cells.s.textContent=pad(left%60);
+  }
+  function anketaOpen(){var a=document.getElementById("anketa");return a&&!a.hidden;}
+  function show(force){
+    if(!force&&(!armed||seen()||anketaOpen()))return;
+    armed=false;remember();
+    render();tick=setInterval(render,1000);
+    promo.hidden=false;promo.setAttribute("aria-hidden","false");
+    document.body.classList.add("promo-open");
+    setTimeout(function(){var c=promo.querySelector(".promo-card");if(c)c.focus();},40);
+  }
+  function hide(){
+    promo.hidden=true;promo.setAttribute("aria-hidden","true");
+    document.body.classList.remove("promo-open");
+    if(tick){clearInterval(tick);tick=null;}
+  }
+  promo.querySelectorAll("[data-promo-close]").forEach(function(el){el.addEventListener("click",hide);});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!promo.hidden)hide();});
+  // Кто уже открыл анкету сам — тому поп-ап не показываем
+  document.querySelectorAll("[data-open]").forEach(function(el){if(!promo.contains(el))el.addEventListener("click",function(){armed=false;});});
+
+  setTimeout(show,25000);
+  document.addEventListener("mouseout",function(e){if(!e.relatedTarget&&e.clientY<=0)show();});
+  var maxY=0;
+  window.addEventListener("scroll",function(){
+    var y=window.scrollY||0,h=document.documentElement.scrollHeight-window.innerHeight;
+    if(y>maxY)maxY=y;
+    if(document.documentElement.classList.contains("is-phone")&&h>0&&maxY>h*.5&&maxY-y>400)show();
+  },{passive:true});
+  window.dsShowPromo=function(){show(true);};
+})();
+</script>
 <script>
 (function(){
   var modal=document.getElementById("anketa");
@@ -625,12 +823,13 @@
   var formBlock=null;
   var lastTrigger=null;
   // Вне GetCourse (локальный просмотр) показываем макет полей, чтобы было видно оформление.
-  var isPreview=!/getcourse|dari-malakhovskaya/.test(location.hostname);
+  var isPreview=!/getcourse|dari-malakhovskaya\.ru/.test(location.hostname);
   function previewForm(){
     box.innerHTML='<div class="f-input-wrapper"><input type="email" placeholder="Введите ваш эл. адрес"></div>'+
       '<div class="builder-item"></div><div class="f-input-wrapper"><input type="text" placeholder="Введите ваше имя"></div>'+
       '<div class="builder-item"></div><div class="f-input-wrapper"><input type="tel" placeholder="Введите ваш телефон"></div>'+
       '<div class="builder-item"></div><div class="f-input-wrapper"><input type="text" placeholder="Логин в Telegram"></div>'+
+      '<div class="f-input-wrapper" data-type="radio"><p class="q">Оцени свою готовность стать участницей 5 сезона «Союза с собой»</p>'+'<label><input type="radio" name="ready"><span>Готова купить уже сейчас</span></label>'+'<label><input type="radio" name="ready"><span>Хочу, пока думаю</span></label>'+'<label><input type="radio" name="ready"><span>Ничего не знаю о продукте, хочу больше информации</span></label></div>'+'<div class="f-input-wrapper" data-type="radio"><p class="q">Предпочтительный канал для связи</p><div class="radio-row">'+'<label><input type="radio" name="channel"><span>WhatsApp</span></label>'+'<label><input type="radio" name="channel"><span>Telegram</span></label></div></div>'+
       '<div class="f-input-wrapper" data-type="checkbox"><label class="field-label"><input type="checkbox"><span class="label-value">Согласие на обработку персональных данных</span></label></div>'+
       '<div class="f-input-wrapper" data-type="checkbox"><label class="field-label"><input type="checkbox"><span class="label-value">Согласие на получение рассылки</span></label></div>'+
       '<button type="submit" disabled>Записаться</button>';
