@@ -25,7 +25,8 @@
   .ds .ty{display:flex;align-items:center;justify-content:center;min-height:100vh;min-height:100svh;padding:64px 20px;background:var(--glow),var(--esp);text-align:center}
   .ds .ty-inner{display:flex;flex-direction:column;align-items:center;max-width:640px}
   .ds .ty-eyebrow{font:400 12px/1.4 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--sand)}
-  .ds .ty-title{margin-top:20px;font:400 clamp(40px,6vw,76px)/1 var(--display);text-transform:uppercase;letter-spacing:-.03em;color:var(--sand)}
+  .ds .ty-title{margin-top:20px;font:400 clamp(30px,4.6vw,60px)/1.02 var(--display);text-transform:uppercase;letter-spacing:-.03em;color:var(--sand);text-wrap:balance}
+  .ds .ty-title span{display:block}
   .ds .ty-text{max-width:28em;margin-top:24px;font:400 clamp(18px,1.7vw,22px)/1.25 var(--display);letter-spacing:-.03em;color:#fff}
   .ds .ty-text .l{display:block}
   /* На телефоне каждая фраза — ровно одна строка: шрифт подстраивается под ширину экрана */
@@ -51,7 +52,7 @@
   <section class="ty">
     <div class="ty-inner">
       <p class="ty-eyebrow">Анкета принята</p>
-      <h1 class="ty-title">Ты в списке</h1>
+      <h1 class="ty-title"><span>Ты в списке,</span> <span>остался последний шаг</span></h1>
       <p class="ty-text"><span class="l">не стала откладывать на потом. уважаю.</span> <span class="l">теперь главное — зайди в закрытый канал.</span></p>
       <p class="ty-note">там ссылки на эфиры 15–17 ноября, мои выгрузки, подарки и условия для тех, кто в предзаписи. в открытом доступе этого не будет.</p>
       <!-- ССЫЛКА: заменить # на ссылку закрытого канала -->
