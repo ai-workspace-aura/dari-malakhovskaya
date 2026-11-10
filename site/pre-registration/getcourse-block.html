@@ -243,8 +243,10 @@
 
   /* Планшет */
   @media (max-width:1180px){
-    html:not(.is-phone) .ds .close-row{grid-template-columns:.8fr 1.2fr}
-    html:not(.is-phone) .ds .close-right{grid-column:2}
+    html:not(.is-phone) .ds .close-row{grid-template-columns:.8fr 1.2fr;grid-template-rows:1fr 1fr;column-gap:36px;row-gap:24px}
+    html:not(.is-phone) .ds .close-photo{grid-row:1/span 2}
+    html:not(.is-phone) .ds .close-left{grid-column:2;align-self:end}
+    html:not(.is-phone) .ds .close-right{grid-column:2;align-self:start}
   }
 
   /* Телефон */
@@ -417,7 +419,7 @@
     <div class="col hero-grid">
       <div class="hero-copy">
         <p class="hero-date">15, 16 и 17 ноября · 18:00 по Москве</p>
-        <p class="eyebrow">Трёхдневный интенсив лично с Дари только для участников анкеты предзаписи</p>
+        <p class="eyebrow">3-дневный интенсив лично с Дари<br>только для участников анкеты предзаписи</p>
         <h1><span>Союз</span><span class="indent">с собой</span></h1>
         <p class="hero-pain">
           <b>Я не учу, как правильно жить и не буду спасать тебя.</b>

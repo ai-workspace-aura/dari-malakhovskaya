@@ -251,8 +251,10 @@
 
   /* Планшет */
   @media (max-width:1180px){
-    html:not(.is-phone) .ds .close-row{grid-template-columns:.8fr 1.2fr}
-    html:not(.is-phone) .ds .close-right{grid-column:2}
+    html:not(.is-phone) .ds .close-row{grid-template-columns:.8fr 1.2fr;grid-template-rows:1fr 1fr;column-gap:36px;row-gap:24px}
+    html:not(.is-phone) .ds .close-photo{grid-row:1/span 2}
+    html:not(.is-phone) .ds .close-left{grid-column:2;align-self:end}
+    html:not(.is-phone) .ds .close-right{grid-column:2;align-self:start}
   }
 
   /* Телефон */
