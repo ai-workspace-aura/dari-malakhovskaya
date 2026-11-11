@@ -254,9 +254,7 @@
   .ds .tab{min-height:44px;padding:0 20px;border-radius:99px;border:1px solid var(--hair-dark);background:transparent;color:var(--on-dark);font:400 14px/1 var(--display);letter-spacing:-.01em;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
   .ds .tab:hover{border-color:var(--sand);color:#fff}
   .ds .tab[aria-selected="true"]{background:var(--sand);border-color:var(--sand);color:var(--ink)}
-  .ds .tab-panel{max-width:40em;margin:28px auto 0;text-align:center;font:400 clamp(20px,1.9vw,27px)/1.2 var(--display);letter-spacing:-.03em;color:#fff}
-  .ds .tab-panel[hidden]{display:none}
-  .ds .fit{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:64px}
+  .ds .fit{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:40px}
   .ds .fit-col{padding:32px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark)}
   .ds .fit-col.yes{background:radial-gradient(90% 70% at 50% 0%,rgba(107,63,160,.4),rgba(107,63,160,.08) 100%),#1F1828;border-color:rgba(201,166,232,.38)}
   .ds .fit-col h3{font:400 24px/1 var(--display);letter-spacing:-.03em;text-transform:uppercase;color:var(--sand)}
@@ -265,6 +263,10 @@
   .ds .fit-col li:first-of-type{margin-top:20px}
   .ds .fit-col li::before{content:"";position:absolute;left:0;top:21px;width:10px;height:10px;border-radius:50%;background:var(--sand)}
   .ds .fit-col.no li::before{background:transparent;border:1px solid var(--on-dark-soft)}
+  .ds .fit-col[hidden]{display:none}
+  .ds .fit-col.yes:not([hidden]){animation:fitIn .35s ease}
+  @keyframes fitIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .ds .fit-lead{margin-top:16px;color:#fff;font-size:16px;line-height:1.45}
   .ds .fit-note{margin-top:24px;text-align:center;color:var(--on-dark-soft)}
 
   /* 10. О Дари */
@@ -688,17 +690,33 @@
         <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="tp2" id="tb2">Я была в прошлых сезонах</button>
         <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="tp3" id="tb3">Я эксперт или предпринимательница</button>
       </div>
-      <p class="tab-panel" role="tabpanel" id="tp1" aria-labelledby="tb1">Ты многое понимаешь о себе, но знания пока не стали способом жить. Прошлые сезоны для входа не нужны.</p>
-      <p class="tab-panel" role="tabpanel" id="tp2" aria-labelledby="tb2" hidden>5 сезон — новая глубина: тело, желание, удовольствие, видимость и деньги.</p>
-      <p class="tab-panel" role="tabpanel" id="tp3" aria-labelledby="tb3" hidden>Хочешь соединить любимое дело, видимость и деньги без насилия над собой.</p>
       <div class="fit">
-        <div class="fit-col yes rv">
-          <h3>Для тебя, если</h3><ul>
-          <li>ты многое понимаешь о себе, но знания пока не стали способом жить</li>
-          <li>устала жить через «надо», контроль и постоянное заслуживание</li>
-          <li>хочешь соединить любимое дело, видимость и деньги без насилия над собой</li>
-          <li>проходила прошлые сезоны и готова к новой глубине</li>
+        <div class="fit-col yes" role="tabpanel" id="tp1" aria-labelledby="tb1">
+          <h3>Для тебя, если</h3>
+          <p class="fit-lead">Прошлые сезоны для входа не нужны. Нужно только честно узнать себя хотя бы в одной строке.</p><ul>
+          <li>ты многое понимаешь о себе, но в момент выбора всё равно живёшь по-старому</li>
+          <li>умеешь собираться, помогать и анализировать, но не чувствуешь, чего хочешь сама</li>
+          <li>повторяешь одни и те же отношения и сценарии под разными именами</li>
+          <li>ждёшь, что тебя выберут и одобрят, и устала ждать</li>
           <li>готова не только слушать, но и менять свои действия</li>
+        </ul></div>
+        <div class="fit-col yes" role="tabpanel" id="tp2" aria-labelledby="tb2" hidden>
+          <h3>Для тебя, если</h3>
+          <p class="fit-lead">Ты уже знаешь, как я работаю. 5 сезон про то, куда мы раньше так глубоко не заходили: тело, желание, удовольствие, деньги.</p><ul>
+          <li>после сезона многое сдвинулось, но где-то ты откатилась назад</li>
+          <li>про себя ты поняла много, а хотеть и получать по-прежнему трудно</li>
+          <li>хочешь, чтобы знания ушли в тело и в действия, а не в новые инсайты</li>
+          <li>тебе нужна не повторная проходка, а новая глубина</li>
+          <li>знаешь, что здесь не гладят по голове, и тебе это подходит</li>
+        </ul></div>
+        <div class="fit-col yes" role="tabpanel" id="tp3" aria-labelledby="tb3" hidden>
+          <h3>Для тебя, если</h3>
+          <p class="fit-lead">Своё дело ты делать умеешь. Вопрос в том, разрешаешь ли ты себе быть в нём видимой и получать за него деньги.</p><ul>
+          <li>в работе ты сильная, а проявляться и называть свою цену трудно</li>
+          <li>работаешь через «надо» и усталость, а не через желание</li>
+          <li>хочешь соединить любимое дело, видимость и деньги без насилия над собой</li>
+          <li>устала доказывать, что заслуживаешь</li>
+          <li>понимаешь, что дело не только в маркетинге, но и в отношениях с собой</li>
         </ul></div>
         <div class="fit-col no rv">
           <h3>Не подойдёт, если</h3><ul>
