@@ -240,7 +240,7 @@
   .ds .promise{margin-top:56px;padding:32px 36px;border-radius:var(--r);background:var(--paper);border:1px solid var(--hair-light);font:400 clamp(20px,1.9vw,27px)/1.2 var(--display);letter-spacing:-.03em;color:var(--g-dark)}
 
   /* 9. Для кого */
-  .ds .tabs{display:flex;justify-content:center;gap:8px;margin-top:48px;flex-wrap:wrap}
+  .ds .tabs{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap}
   .ds .tab{min-height:44px;padding:0 20px;border-radius:99px;border:1px solid var(--hair-dark);background:transparent;color:var(--on-dark);font:400 14px/1 var(--display);letter-spacing:-.01em;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
   .ds .tab:hover{border-color:var(--sand);color:#fff}
   .ds .tab[aria-selected="true"]{background:var(--sand);border-color:var(--sand);color:var(--ink)}
@@ -253,8 +253,9 @@
   .ds .fit-col li:first-of-type{margin-top:20px}
   .ds .fit-col li::before{content:"";position:absolute;left:0;top:21px;width:10px;height:10px;border-radius:50%;background:var(--sand)}
   .ds .fit-col.no li::before{background:transparent;border:1px solid var(--on-dark-soft)}
-  .ds .fit-col[hidden]{display:none}
-  .ds .fit-col.yes:not([hidden]){animation:fitIn .35s ease}
+  .ds .fit[hidden]{display:none}
+  .ds .fit:not([hidden]){animation:fitIn .35s ease}
+  .ds .tabs-hint{margin-top:40px;text-align:center;font-size:14px;color:var(--on-dark-soft)}
   @keyframes fitIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .ds .fit-lead{margin-top:16px;color:#fff;font-size:16px;line-height:1.45}
   .ds .fit-note{margin-top:24px;text-align:center;color:var(--on-dark-soft)}
@@ -397,7 +398,10 @@
   html.is-phone .ds .compare-col,html.is-phone .ds .fit-col{padding:24px 20px}
   html.is-phone .ds .results{margin-top:56px;gap:0}
   html.is-phone .ds .promise{margin-top:36px;padding:24px 20px}
-  html.is-phone .ds .tab{flex:1 1 100%}
+  html.is-phone .ds .tabs{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;margin-left:-16px;margin-right:-16px;padding:0 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  html.is-phone .ds .tabs::-webkit-scrollbar{display:none}
+  html.is-phone .ds .tab{flex:0 0 auto;white-space:nowrap}
+  html.is-phone .ds .tabs-hint{margin-top:28px}
   html.is-phone .ds .fit{margin-top:40px}
   html.is-phone .ds .dari-grid,html.is-phone .ds .final-grid{grid-template-columns:1fr;gap:32px}
   html.is-phone .ds .dari-photo,html.is-phone .ds .final-photo{aspect-ratio:4/4.4}
@@ -675,45 +679,63 @@
         <p class="eyebrow rv">Для кого</p>
         <h2 class="h2 rv">Это про меня?</h2>
       </div>
+      <p class="tabs-hint rv">Выбери, что ближе к тебе</p>
       <div class="tabs rv" role="tablist">
         <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="tp1" id="tb1">Я здесь впервые</button>
         <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="tp2" id="tb2">Я была в прошлых сезонах</button>
         <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="tp3" id="tb3">Я эксперт или предпринимательница</button>
       </div>
-      <div class="fit">
-        <div class="fit-col yes" role="tabpanel" id="tp1" aria-labelledby="tb1">
+      <div class="fit" role="tabpanel" id="tp1" aria-labelledby="tb1">
+        <div class="fit-col yes">
           <h3>Для тебя, если</h3>
           <p class="fit-lead">Прошлые сезоны для входа не нужны. Нужно только честно узнать себя хотя бы в одной строке.</p><ul>
-          <li>ты многое понимаешь о себе, но в момент выбора всё равно живёшь по-старому</li>
-          <li>умеешь собираться, помогать и анализировать, но не чувствуешь, чего хочешь сама</li>
-          <li>повторяешь одни и те же отношения и сценарии под разными именами</li>
-          <li>ждёшь, что тебя выберут и одобрят, и устала ждать</li>
-          <li>готова не только слушать, но и менять свои действия</li>
-        </ul></div>
-        <div class="fit-col yes" role="tabpanel" id="tp2" aria-labelledby="tb2" hidden>
+            <li>ты многое понимаешь о себе, но в момент выбора всё равно живёшь по-старому</li>
+            <li>умеешь собираться, помогать и анализировать, но не чувствуешь, чего хочешь сама</li>
+            <li>повторяешь одни и те же отношения и сценарии под разными именами</li>
+            <li>ждёшь, что тебя выберут и одобрят, и устала ждать</li>
+            <li>готова не только слушать, но и менять свои действия</li>
+          </ul></div>
+        <div class="fit-col no">
+          <h3>Не подойдёт, если</h3><ul>
+            <li>ждёшь готовых советов, как жить правильно: их не будет, будет вопрос «как моё?»</li>
+            <li>ищешь сексуальный тренинг или развлекательный марафон</li>
+            <li>не готова соблюдать конфиденциальность и уважать границы других участниц</li>
+            <li>тебе сейчас нужна экстренная, медицинская или психиатрическая помощь</li>
+          </ul></div>
+      </div>
+      <div class="fit" role="tabpanel" id="tp2" aria-labelledby="tb2" hidden>
+        <div class="fit-col yes">
           <h3>Для тебя, если</h3>
-          <p class="fit-lead">Ты уже знаешь, как я работаю. 5 сезон про то, куда мы раньше так глубоко не заходили: тело, желание, удовольствие, деньги.</p><ul>
-          <li>после сезона многое сдвинулось, но где-то ты откатилась назад</li>
-          <li>про себя ты поняла много, а хотеть и получать по-прежнему трудно</li>
-          <li>хочешь, чтобы знания ушли в тело и в действия, а не в новые инсайты</li>
-          <li>тебе нужна не повторная проходка, а новая глубина</li>
-          <li>знаешь, что здесь не гладят по голове, и тебе это подходит</li>
-        </ul></div>
-        <div class="fit-col yes" role="tabpanel" id="tp3" aria-labelledby="tb3" hidden>
+          <p class="fit-lead">Каждый сезон — отдельная история со своей темой. Путь знакомый, а тема новая: в этот раз «Либидо жизни» — тело, желание, удовольствие, деньги.</p><ul>
+            <li>ты уже научилась замечать, где себя покидаешь, и хочешь идти дальше</li>
+            <li>верность себе появилась, а чувствовать удовольствие и получать пока трудно</li>
+            <li>хочешь, чтобы союз с собой стал не только пониманием, но и способом жить</li>
+            <li>тебе интересна новая тема, а не повтор пройденного</li>
+            <li>знаешь, как я работаю, и тебе это подходит</li>
+          </ul></div>
+        <div class="fit-col no">
+          <h3>Не подойдёт, если</h3><ul>
+            <li>ждёшь повторения прошлого сезона: тема и содержание здесь новые</li>
+            <li>хочешь снова побыть в группе, но ничего не менять в своих действиях</li>
+            <li>тебе сейчас нужна экстренная, медицинская или психиатрическая помощь</li>
+          </ul></div>
+      </div>
+      <div class="fit" role="tabpanel" id="tp3" aria-labelledby="tb3" hidden>
+        <div class="fit-col yes">
           <h3>Для тебя, если</h3>
           <p class="fit-lead">Своё дело ты делать умеешь. Вопрос в том, разрешаешь ли ты себе быть в нём видимой и получать за него деньги.</p><ul>
-          <li>в работе ты сильная, а проявляться и называть свою цену трудно</li>
-          <li>работаешь через «надо» и усталость, а не через желание</li>
-          <li>хочешь соединить любимое дело, видимость и деньги без насилия над собой</li>
-          <li>устала доказывать, что заслуживаешь</li>
-          <li>понимаешь, что дело не только в маркетинге, но и в отношениях с собой</li>
-        </ul></div>
-        <div class="fit-col no rv">
+            <li>в работе ты сильная, а проявляться и называть свою цену трудно</li>
+            <li>работаешь через «надо» и усталость, а не через желание</li>
+            <li>хочешь соединить любимое дело, видимость и деньги без насилия над собой</li>
+            <li>устала доказывать, что заслуживаешь</li>
+            <li>понимаешь, что дело не только в маркетинге, но и в отношениях с собой</li>
+          </ul></div>
+        <div class="fit-col no">
           <h3>Не подойдёт, если</h3><ul>
-          <li>ищешь быстрые техники заработка, сексуальный тренинг или развлекательный марафон</li>
-          <li>не готова соблюдать конфиденциальность и уважать границы других участниц</li>
-          <li>тебе сейчас нужна экстренная, медицинская или психиатрическая помощь</li>
-        </ul></div>
+            <li>ищешь быструю технику заработка или курс по продвижению</li>
+            <li>ждёшь гарантированного роста дохода: его не обещаю</li>
+            <li>тебе сейчас нужна экстренная, медицинская или психиатрическая помощь</li>
+          </ul></div>
       </div>
       <p class="fit-note rv">Сезоны можно проходить в любом порядке.</p>
     </div>
