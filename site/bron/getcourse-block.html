@@ -1,0 +1,484 @@
+<!-- Союз с собой — бесплатная бронь места (2-й день тренинга). Вставлять в HTML-блок GetCourse целиком. Стили и подвал взяты из основного сайта (site/main).
+     АДРЕС СТРАНИЦЫ: school.dari-malakhovskaya.ru/bron -->
+<!-- ФОРМА: под этим HTML-блоком поставить блок «Форма» GetCourse с полями: имя, телефон, ник в Telegram (+ согласия). Заголовок у формы можно не писать —
+     скрипт сам перенесёт форму в карточку справа и скроет её заголовок. Текст кнопки в форме: «Забронировать место». -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@400&display=swap" rel="stylesheet">
+<script>
+(function(){
+  try{
+    var html=document.documentElement;
+    var ua=navigator.userAgent||"";
+    var phoneUA=/iPhone|iPod|Android.+Mobile|Windows Phone|IEMobile|webOS|BlackBerry/i.test(ua);
+    function apply(){
+      var w=window.innerWidth||html.clientWidth||9999;
+      html.classList.toggle("is-phone",phoneUA||w<=960);
+    }
+    apply();
+    window.addEventListener("resize",apply);
+  }catch(e){}
+})();
+</script>
+<style>
+  :root{color-scheme:only light}
+  html{color-scheme:only light;background:#1A1A1A;scroll-behavior:smooth}
+  body{margin:0;background:#1A1A1A;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  .gc-main-content>.container{width:auto!important;max-width:none!important;padding:0!important}
+
+  .ds{
+    --esp:#1A1A1A;--cocoa:#111111;
+    --g:#6B3FA0;--g-dark:#3E2468;
+    --sand:#C9A6E8;--taupe:#6B3FA0;
+    --stone:#F3ECFA;--paper:#FFFCFA;--off:#F7F4F2;
+    --ink:#1A1A1A;--muted:#6B6570;
+    --on-dark:rgba(255,255,255,.72);--on-dark-soft:rgba(255,255,255,.5);
+    --hair-dark:rgba(201,166,232,.2);--hair-light:#E6E1EA;
+    --display:"Tenor Sans",Georgia,serif;
+    --text:"Graphik LCG","GraphikLCG","Inter",Arial,sans-serif;
+    --r:20px;
+    --ease:cubic-bezier(.23,1,.32,1);
+    font:400 14px/1.45 var(--text);letter-spacing:-.02em;color:var(--ink);background:var(--paper);
+  }
+  .ds *{box-sizing:border-box}
+  .ds img{display:block;max-width:100%}
+  .ds p,.ds h1,.ds h2,.ds h3,.ds ol,.ds ul,.ds figure{margin:0;padding:0}
+  .ds ol,.ds ul{list-style:none}
+  .ds b,.ds strong{font-weight:400}
+  .ds button{font-family:inherit}
+  .ds .col{width:min(1240px,calc(100% - 96px));margin:0 auto}
+  .ds .on-dark{--taupe:#C9A6E8;background:var(--esp);color:#fff}
+  .ds .bg-stone{background:var(--stone)}
+  .ds .bg-paper{background:var(--paper)}
+
+  .ds .eyebrow{font:400 12px/1.4 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--taupe)}
+  .ds .h2{font:400 clamp(30px,3.7vw,54px)/1 var(--display);text-transform:uppercase;letter-spacing:-.03em;color:var(--ink)}
+  .ds .on-dark .h2{color:var(--sand)}
+  .ds .lead{font:400 clamp(20px,1.8vw,26px)/1.2 var(--display);letter-spacing:-.03em}
+  .ds .muted{color:var(--muted);font-size:15px}
+  .ds .on-dark .muted{color:var(--on-dark)}
+  .ds .sec{padding:120px 0}
+  .ds .head-row{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end}
+  .ds .head-row .h2{margin-top:18px}
+  .ds .center{text-align:center}
+  .ds .center .h2{margin-top:18px}
+  .ds .center .muted{max-width:36em;margin:18px auto 0}
+  .ds .big-quote{max-width:24em;margin:64px auto 0;text-align:center;font:400 clamp(24px,2.6vw,38px)/1.12 var(--display);letter-spacing:-.03em;color:var(--g-dark)}
+  .ds .on-dark .big-quote{color:var(--sand)}
+
+  .ds .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:56px;padding:0 32px;text-align:center;
+    border:1px solid var(--g);border-radius:8px;background:var(--g);color:#fff;
+    font:400 15px/1.1 var(--display);letter-spacing:-.02em;cursor:pointer;text-decoration:none;
+    transition:background .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease),color .25s var(--ease);
+  }
+  .ds .btn:hover{background:var(--g-dark);border-color:var(--g-dark);transform:translateY(-1px)}
+  .ds .btn .arr{width:16px;height:16px;flex:none}
+
+  /* Иконки */
+  .ds .ico{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:12px;background:#fff;border:1px solid var(--hair-light);color:var(--g)}
+  .ds .ico svg{width:22px;height:22px}
+  .ds .on-dark .ico{background:rgba(201,166,232,.1);border-color:var(--hair-dark);color:var(--sand)}
+
+
+  /* 1. Первый экран */
+  .ds .hero{position:relative;overflow:hidden}
+  .ds .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 90% at 78% 30%,rgba(107,63,160,.32),transparent 62%);pointer-events:none}
+  .ds .hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);gap:clamp(28px,4vw,56px);align-items:center;min-height:100vh;min-height:100svh;padding:clamp(36px,4.5vw,68px) 0}
+  .ds .hero-copy{display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+  .ds .hero .eyebrow{margin-bottom:22px;font-size:14px}
+  .ds .hero h1{font:400 clamp(56px,6.4vw,104px)/.92 var(--display);text-transform:uppercase;letter-spacing:-.03em;color:var(--sand)}
+  .ds .hero h1 span{display:block;white-space:nowrap}
+  .ds .hero h1 .indent{padding-left:.6em}
+  .ds .hero h1 em{font-style:normal;color:#fff}
+  .ds .hero-lead{max-width:none;margin-top:32px;font:400 clamp(22px,2.1vw,30px)/1.15 var(--display);letter-spacing:-.03em;color:#fff}
+  .ds .hero-date{display:flex;align-items:center;gap:12px;margin:28px 0 36px;font:400 16px/1.2 var(--display);letter-spacing:-.01em;color:var(--sand)}
+  .ds .hero-date svg{width:22px;height:22px;flex:none}
+  .ds .hero .btn{min-width:300px}
+  .ds .hero-photo{position:relative;border:1px solid var(--hair-dark);border-radius:var(--r);overflow:hidden;background:var(--cocoa);min-height:clamp(460px,62svh,680px);box-shadow:0 24px 70px rgba(0,0,0,.24)}
+  .ds .photo-cap{
+    position:absolute;left:14px;right:14px;bottom:14px;display:grid;gap:8px;padding:18px 20px;
+    border:1px solid var(--hair-dark);border-radius:14px;background:rgba(26,26,26,.78);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  }
+  .ds .photo-cap strong{font:400 20px/1 var(--display);letter-spacing:-.03em;color:var(--sand)}
+  .ds .photo-cap span{font-size:13px;line-height:1.4;color:var(--on-dark)}
+  .ds .hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 20%}
+
+  /* 2. Либидо жизни */
+  .ds .head-row.top{align-items:start}
+  .ds .lib-intro{max-width:30em;margin-top:24px}
+  .ds .lib-q{font:400 clamp(24px,2.3vw,34px)/1.1 var(--display);letter-spacing:-.03em;color:var(--g-dark)}
+  .ds .lib-copy .muted+.muted{margin-top:12px}
+  .ds .lib-copy .lib-q+.muted{margin-top:16px}
+  .ds .verbs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:56px}
+  .ds .verb{display:flex;flex-direction:column;gap:14px;padding:28px;border-radius:var(--r);background:var(--off);border:1px solid var(--hair-light)}
+  .ds .verb b{margin-top:14px;font:400 22px/1 var(--display);letter-spacing:-.02em;text-transform:uppercase;color:var(--ink)}
+  .ds .verb p{color:var(--muted)}
+  .ds .note{margin-top:28px;text-align:center;color:var(--muted)}
+  .ds .quote-card{display:grid;grid-template-columns:.7fr 1.3fr;margin-top:64px;border-radius:var(--r);overflow:hidden;background:var(--esp);color:#fff}
+  .ds .quote-card figure{position:relative;min-height:340px;background:var(--cocoa)}
+  .ds .quote-card figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+  .ds .quote-card div{display:flex;flex-direction:column;justify-content:center;padding:48px}
+  .ds .quote-card p{max-width:16em;font:400 clamp(26px,2.8vw,42px)/1.08 var(--display);letter-spacing:-.03em;color:var(--sand)}
+  .ds .quote-card span{margin-top:18px;font:400 12px/1.4 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--on-dark-soft)}
+
+  /* 3. Для кого */
+  .ds .for-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:56px}
+  .ds .for-card{display:flex;flex-direction:column;gap:12px;padding:28px;border-radius:var(--r);background:#fff;border:1px solid var(--hair-light)}
+  .ds .for-card::before{content:"";width:10px;height:10px;margin-bottom:8px;border-radius:50%;background:var(--g)}
+  .ds .for-card b{font:400 clamp(20px,1.7vw,24px)/1.12 var(--display);letter-spacing:-.03em;color:var(--ink)}
+  .ds .for-card p{color:var(--muted)}
+
+  /* 4. Путь */
+  .ds .stages{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:56px}
+  .ds .stage{display:grid;grid-template-columns:140px 1fr;min-height:200px;overflow:hidden;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark)}
+  .ds .stage-art{position:relative;background:var(--cocoa)}
+  .ds .stage-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 18%}
+  .ds .stage-body{display:flex;flex-direction:column;justify-content:center;padding:28px}
+  .ds .stage-n{font:400 12px/1 var(--display);letter-spacing:.06em;color:var(--sand)}
+  .ds .stage h3{margin-top:14px;font:400 26px/1 var(--display);letter-spacing:-.03em;text-transform:uppercase;color:#fff}
+  .ds .stage p{margin-top:12px;color:var(--on-dark);font-size:15px}
+  .ds .stage.final{grid-column:1/-1;grid-template-columns:1fr 1fr;background:radial-gradient(90% 90% at 70% 0%,rgba(107,63,160,.5),rgba(107,63,160,.12) 100%),#1F1828;border-color:rgba(201,166,232,.38)}
+  .ds .stage.final{grid-column:3;grid-row:1/3;grid-template-columns:1fr;position:relative}
+  .ds .stage.final .stage-art{position:absolute;inset:0}
+  .ds .stage.final .stage-art img{object-position:center 20%}
+  .ds .stage.final .stage-art::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(31,24,40,.96) 0%,rgba(46,28,72,.75) 38%,rgba(31,24,40,0) 70%)}
+  .ds .stage.final .stage-body{position:relative;justify-content:flex-end;padding:32px}
+  .ds .stage.final h3{font-size:clamp(30px,2.8vw,40px);color:var(--sand)}
+  .ds .stage.final p{font-size:17px;color:#fff}
+
+  /* 5. Что входит */
+  .ds .live{display:grid;grid-template-columns:1.1fr .9fr;margin-top:56px;border-radius:var(--r);overflow:hidden;background:var(--esp);color:#fff}
+  .ds .live-copy{display:flex;flex-direction:column;justify-content:center;padding:56px 48px}
+  .ds .live-copy h3{font:400 clamp(28px,3vw,44px)/1.02 var(--display);letter-spacing:-.03em;text-transform:uppercase;color:var(--sand)}
+  .ds .live-copy p{margin-top:20px;max-width:28em;font-size:16px;color:var(--on-dark)}
+  .ds .live figure{position:relative;min-height:380px;background:var(--cocoa)}
+  .ds .live figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 22%}
+  .ds .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+  .ds .feat li{display:flex;flex-direction:column;gap:12px;padding:28px;border-radius:var(--r);background:var(--off);border:1px solid var(--hair-light)}
+  .ds .feat b{margin-top:12px;font:400 clamp(20px,1.7vw,23px)/1.1 var(--display);letter-spacing:-.03em;color:var(--ink)}
+  .ds .feat p{color:var(--muted)}
+  .ds .feat li.book{background:var(--stone);border-color:transparent}
+
+  /* 6. Результаты */
+  .ds .results{display:grid;grid-template-columns:repeat(3,1fr);gap:0 40px;margin-top:48px}
+  .ds .res{padding:28px 0 36px;border-top:1px solid rgba(62,36,104,.18)}
+  .ds .res .ico{margin-bottom:20px}
+  .ds .res b{display:block;font:400 22px/1.05 var(--display);letter-spacing:-.03em;text-transform:uppercase;color:var(--ink)}
+  .ds .res p{margin-top:10px;color:var(--muted)}
+
+  /* 7. Программа */
+  .ds .weeks{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:56px}
+  .ds .week{display:flex;flex-direction:column;gap:10px;padding:26px 28px;border-radius:var(--r);background:#fff;border:1px solid var(--hair-light)}
+  .ds .week-n{font:400 12px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--taupe)}
+  .ds .week b{margin-top:6px;font:400 clamp(20px,1.7vw,24px)/1.1 var(--display);letter-spacing:-.03em;color:var(--ink)}
+  .ds .week p{color:var(--muted)}
+
+  /* 8. Тарифы */
+  .ds .plans{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(14,auto);column-gap:14px;max-width:1080px;margin:56px auto 0}
+  .ds .plan{display:grid;grid-row:span 14;grid-template-rows:subgrid;padding:36px 32px 32px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark)}
+  .ds .plan.vip{background:radial-gradient(90% 40% at 50% 0%,rgba(107,63,160,.5),rgba(107,63,160,.12) 100%),#1F1828;border-color:rgba(201,166,232,.38)}
+  .ds .plan-top{padding-bottom:20px}
+  .ds .plan-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .ds .plan-name{font:400 clamp(32px,3.2vw,44px)/1 var(--display);text-transform:uppercase;letter-spacing:-.03em;color:var(--sand)}
+  .ds .plan-seats{padding:7px 12px;border-radius:99px;background:rgba(201,166,232,.14);border:1px solid rgba(201,166,232,.28);font:400 12px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;color:#fff;white-space:nowrap}
+  .ds .plan-for{margin-top:16px;color:var(--on-dark)}
+  .ds .plan-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-top:1px solid var(--hair-dark);color:var(--on-dark)}
+  .ds .plan-item svg{width:18px;height:18px;flex:none;color:var(--sand)}
+  .ds .plan-item b{color:#fff}
+  .ds .plan-item.star{margin:6px -14px;padding:14px;border:1px solid rgba(201,166,232,.38);border-radius:12px;background:rgba(201,166,232,.12)}
+  .ds .plan-item.star+.plan-item{border-top:0}
+  .ds .plan-price{padding-top:24px;border-top:1px solid var(--hair-dark)}
+  .ds .plan-price .eyebrow{color:var(--on-dark-soft)}
+  .ds .plan-price b{display:block;margin-top:12px;font:400 clamp(40px,4vw,54px)/1 var(--display);letter-spacing:-.03em;color:#fff;white-space:nowrap}
+  .ds .plan-price span{display:block;margin-top:10px;font-size:13px;color:var(--on-dark-soft)}
+  .ds .plan-cta{display:flex;flex-direction:column;gap:10px;padding-top:24px}
+  .ds .plan .btn{width:100%}
+  .ds .plan.vip .btn:not(.line){background:#fff;border-color:#fff;color:var(--g-dark)}
+  .ds .plan.vip .btn:not(.line):hover{background:var(--sand);border-color:var(--sand)}
+  .ds .plan .btn.line{min-height:52px;background:transparent;border-color:rgba(255,255,255,.28);color:#fff}
+  .ds .plan .btn.line:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.55)}
+  .ds .tariffs-note{max-width:40em;margin:28px auto 0;text-align:center;font-size:13px;color:var(--on-dark-soft)}
+  .ds .tariffs-note a{color:var(--on-dark)}
+
+  /* 9. Видео */
+  .ds .video{position:relative;display:grid;place-items:center;aspect-ratio:16/9;margin-top:48px;border-radius:var(--r);overflow:hidden;background:var(--cocoa);color:#fff}
+  .ds .video img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;opacity:.55}
+  .ds .video::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,17,17,.1),rgba(17,17,17,.65))}
+  .ds .video-play{position:relative;z-index:1;display:grid;justify-items:center;gap:14px;text-align:center}
+  .ds .video-play i{display:grid;place-items:center;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .ds .video-play i svg{width:28px;height:28px;margin-left:4px}
+  .ds .video-play b{font:400 20px/1.1 var(--display);letter-spacing:-.02em}
+  .ds .video-play span{font-size:13px;color:var(--on-dark)}
+
+  /* 10. О Дари */
+  .ds .dari-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center}
+  .ds .dari-photo{border-radius:var(--r);overflow:hidden;aspect-ratio:4/5;background:var(--cocoa)}
+  .ds .dari-photo img{width:100%;height:100%;object-fit:cover;object-position:center 25%}
+  .ds .dari-copy .h2{margin-top:18px}
+  .ds .dari-copy .lead{margin-top:28px;color:var(--ink)}
+  .ds .dari-copy .muted{margin-top:16px;max-width:32em}
+
+  /* 11. Отзывы */
+  .ds .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+  .ds .review{position:relative;display:grid;place-items:center;aspect-ratio:9/14;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark);color:var(--on-dark)}
+  .ds .review i{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;border:1px solid var(--hair-dark);color:var(--sand)}
+  .ds .review i svg{width:22px;height:22px;margin-left:3px}
+  .ds .review span{position:absolute;left:20px;bottom:18px;font:400 14px/1 var(--display);color:#fff}
+  .ds .reviews-cta{display:flex;justify-content:center;margin-top:40px}
+  .ds .reviews-cta .btn{min-width:300px}
+
+  /* 12. Остались вопросы */
+  .ds .ask{max-width:720px;margin:0 auto;text-align:center}
+  .ds .ask .muted{margin-top:18px}
+  .ds .ask .muted+.muted{margin-top:6px}
+  .ds .ask .btn{margin-top:32px}
+
+  /* Подвал */
+  .ds .footer{padding:56px 0 40px;background:var(--cocoa);color:var(--on-dark-soft);font-size:12px;line-height:1.5}
+  .ds .footer .col{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end}
+  .ds .footer-req{display:grid;gap:2px}
+  .ds .footer-req strong{margin-bottom:8px;font:400 18px/1.1 var(--display);letter-spacing:-.03em;color:var(--sand)}
+  .ds .footer-links{display:grid;gap:6px;justify-items:end;text-align:right}
+  .ds .footer a{color:var(--on-dark);text-decoration:none;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+  .ds .footer a:hover{color:var(--sand);border-color:var(--hair-dark)}
+  .ds .footer a.offer{color:#fff}
+  .ds .footer .tg{display:inline-flex;align-items:center;gap:8px}
+  .ds .footer .tg svg{width:16px;height:16px}
+
+  /* Появление при прокрутке */
+  .ds .rv{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .ds .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.ds .rv{opacity:1;transform:none;transition:none}}
+
+  /* Планшет */
+  @media (max-width:1180px){
+    html:not(.is-phone) .ds .verbs{grid-template-columns:repeat(2,1fr)}
+    html:not(.is-phone) .ds .for-grid,html:not(.is-phone) .ds .feat{grid-template-columns:repeat(2,1fr)}
+    html:not(.is-phone) .ds .stages{grid-template-columns:repeat(2,1fr)}
+    html:not(.is-phone) .ds .stage{grid-template-columns:120px 1fr}
+    html:not(.is-phone) .ds .stage.final{grid-column:1/-1;grid-row:auto;grid-template-columns:1fr 1fr}
+    html:not(.is-phone) .ds .stage.final .stage-art{position:relative;inset:auto}
+    html:not(.is-phone) .ds .stage.final .stage-art::after{display:none}
+    html:not(.is-phone) .ds .stage.final .stage-body{justify-content:center;padding:40px 48px}
+    }
+
+  /* Телефон */
+  html.is-phone .ds .col{width:calc(100% - 32px)}
+  html.is-phone .ds .sec{padding:72px 0}
+  html.is-phone .ds .head-row{grid-template-columns:1fr;gap:20px}
+  html.is-phone .ds .big-quote{margin-top:40px}
+  html.is-phone .ds .hero-grid{grid-template-columns:1fr;gap:32px;min-height:0;padding:36px 0 32px}
+  html.is-phone .ds .hero .eyebrow{font-size:12px;margin-bottom:16px}
+  html.is-phone .ds .hero h1{font-size:clamp(40px,12.4vw,84px)}
+  html.is-phone .ds .hero h1 .indent{padding-left:0}
+  html.is-phone .ds .hero-lead{margin-top:22px}
+  .ds .hero-lead .br-m,html.is-phone .ds .hero-lead .br-d{display:none}
+  html.is-phone .ds .hero-lead .br-m{display:inline}
+  html.is-phone .ds .hero-date{margin:22px 0 26px;font-size:15px}
+  html.is-phone .ds .hero .btn{width:100%;min-width:0}
+  html.is-phone .ds .hero-copy{align-items:stretch}
+  html.is-phone .ds .hero-photo{min-height:0;aspect-ratio:3/4;max-height:560px}
+  html.is-phone .ds .verbs,html.is-phone .ds .for-grid,html.is-phone .ds .feat,html.is-phone .ds .results,html.is-phone .ds .weeks,html.is-phone .ds .stages{grid-template-columns:1fr}
+  html.is-phone .ds .verbs,html.is-phone .ds .for-grid,html.is-phone .ds .stages,html.is-phone .ds .weeks{margin-top:36px}
+  html.is-phone .ds .verbs{grid-template-columns:1fr 1fr;gap:10px}
+  html.is-phone .ds .verb{padding:20px 16px}
+  html.is-phone .ds .verb b{font-size:18px}
+  html.is-phone .ds .verb p{font-size:13px}
+  html.is-phone .ds .for-card,html.is-phone .ds .feat li,html.is-phone .ds .week{padding:22px 20px}
+  html.is-phone .ds .quote-card{grid-template-columns:1fr;margin-top:40px}
+  html.is-phone .ds .quote-card figure{min-height:0;aspect-ratio:4/3}
+  html.is-phone .ds .quote-card div{padding:28px 20px}
+  html.is-phone .ds .stage{grid-template-columns:104px 1fr;min-height:0}
+  html.is-phone .ds .stage-body{padding:20px 18px}
+  html.is-phone .ds .stage h3{font-size:21px}
+  html.is-phone .ds .stage.final{grid-column:auto;grid-row:auto;grid-template-columns:1fr}
+  html.is-phone .ds .stage.final .stage-art{position:relative;inset:auto}
+  html.is-phone .ds .stage.final .stage-art::after{display:none}
+  html.is-phone .ds .stage.final .stage-art{aspect-ratio:4/3}
+  html.is-phone .ds .stage.final .stage-body{padding:24px 20px}
+  html.is-phone .ds .live{grid-template-columns:1fr;margin-top:36px}
+  html.is-phone .ds .live-copy{padding:28px 20px}
+  html.is-phone .ds .live figure{min-height:0;aspect-ratio:4/3.4;order:-1}
+  html.is-phone .ds .feat{gap:10px;margin-top:10px}
+  html.is-phone .ds .results{margin-top:28px}
+  html.is-phone .ds .res{padding:22px 0 26px}
+  html.is-phone .ds .plans{grid-template-columns:1fr;row-gap:0;margin-top:36px}
+  html.is-phone .ds .plan{padding:28px 20px 22px}
+  html.is-phone .ds .plan.vip{margin-top:14px}
+  html.is-phone .ds .video{aspect-ratio:4/5;margin-top:32px}
+  html.is-phone .ds .dari-grid{grid-template-columns:1fr;gap:32px}
+  html.is-phone .ds .dari-photo{aspect-ratio:4/4.4}
+  html.is-phone .ds .reviews{display:flex;gap:10px;overflow-x:auto;margin:32px -16px 0;padding:0 16px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  html.is-phone .ds .reviews::-webkit-scrollbar{display:none}
+  html.is-phone .ds .review{flex:0 0 72%;scroll-snap-align:center}
+  html.is-phone .ds .reviews-cta .btn,html.is-phone .ds .ask .btn{width:100%;min-width:0}
+  html.is-phone .ds .footer .col{grid-template-columns:1fr}
+  html.is-phone .ds .footer-links{justify-items:start;text-align:left}
+  /* Кнопки между блоками */
+  .ds .sec-cta{display:flex;justify-content:center;margin-top:48px}
+  .ds .sec-cta .btn{min-width:280px}
+  .ds .sticky-cta{display:none}
+  html.is-phone .ds .sticky-cta{position:fixed;left:16px;right:16px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:10px;background:var(--g);color:#fff;font:400 15px/1 var(--display);text-decoration:none;box-shadow:0 10px 30px rgba(17,17,17,.35);opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+  html.is-phone .ds .sticky-cta.on{opacity:1;transform:none;pointer-events:auto}
+  html.is-phone .ds .sec-cta .btn{width:100%;min-width:0}
+  html.is-phone .ds .sec-cta{margin-top:32px}
+
+  /* Рамки */
+  .ds .frames{max-width:44em;margin:36px auto 0;padding:18px 24px;border-radius:14px;border:1px solid var(--hair-dark);text-align:center;font-size:14px;color:var(--on-dark)}
+  .ds .frames+.tariffs-note{margin-top:16px}
+  html.is-phone .ds .frames{padding:16px 18px;font-size:13px}
+
+  /* Вопросы */
+  .ds .faq-list{max-width:880px;margin:48px auto 0}
+  .ds .faq details{border-top:1px solid rgba(62,36,104,.18)}
+  .ds .faq details:last-child{border-bottom:1px solid rgba(62,36,104,.18)}
+  .ds .faq summary{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:22px 0;cursor:pointer;list-style:none;font:400 clamp(18px,1.6vw,22px)/1.2 var(--display);letter-spacing:-.03em;color:var(--ink)}
+  .ds .faq summary::-webkit-details-marker{display:none}
+  .ds .faq summary::after{content:"";flex:none;width:8px;height:8px;border-right:1px solid var(--g);border-bottom:1px solid var(--g);transform:rotate(45deg) translate(-2px,-2px);transition:transform .25s var(--ease)}
+  .ds .faq details[open] summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
+  .ds .faq details p{max-width:44em;padding:0 0 24px;color:var(--muted);font-size:15px}
+  .ds .faq details a{color:var(--g)}
+  html.is-phone .ds .faq-list{margin-top:32px}
+</style>
+
+<style>
+  /* Страница брони */
+  .ds .bron{position:relative;overflow:hidden;background:var(--esp);color:#fff}
+  .ds .bron::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 80% 30%,rgba(107,63,160,.34),transparent 62%),radial-gradient(50% 60% at 10% 90%,rgba(107,63,160,.16),transparent 60%);pointer-events:none}
+  .ds .bron-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:clamp(32px,5vw,88px);align-items:center;min-height:100vh;min-height:100svh;padding:clamp(40px,5vw,72px) 0}
+  .ds .bron .eyebrow{margin-bottom:22px;font-size:14px}
+  .ds .bron h1{font:400 clamp(48px,5.6vw,92px)/.94 var(--display);text-transform:uppercase;letter-spacing:-.03em;color:var(--sand)}
+  .ds .bron h1 span{display:block;white-space:nowrap}
+  .ds .bron h1 .indent{padding-left:.6em}
+  .ds .bron-lead{max-width:22em;margin-top:28px;font:400 clamp(20px,1.9vw,26px)/1.2 var(--display);letter-spacing:-.03em;color:#fff}
+  .ds .bron-facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px;padding:0;list-style:none}
+  .ds .bron-facts li{display:inline-flex;align-items:center;gap:10px;min-height:40px;padding:0 16px;border:1px solid var(--hair-dark);border-radius:999px;background:rgba(201,166,232,.08);font:400 14px/1 var(--display);color:var(--sand)}
+  .ds .bron-facts svg{width:18px;height:18px;flex:none}
+  .ds .bron-card{position:relative;padding:36px 32px 30px;border-radius:var(--r);background:#FCFAF7;color:#1A1A1A;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+  .ds .bron-card h2{font:400 30px/1 var(--display);text-transform:uppercase;letter-spacing:-.03em;color:#1A1A1A}
+  .ds .bron-card .bron-card-sub{margin-top:10px;font-size:14px;line-height:1.45;color:#6B6570}
+  .ds .bron-card .bron-form{margin-top:24px}
+  .ds .bron-wait{margin:0;font-size:14px;line-height:1.45;color:#6B6570}
+  .ds .bron-note{margin-top:16px;font-size:12px;line-height:1.45;color:#8A8490;text-align:center}
+
+  /* Нативная форма GetCourse внутри карточки */
+  .ds .bron-form .lt-block,.ds .bron-form .lt-block-wrapper,.ds .bron-form .container,.ds .bron-form .row,.ds .bron-form [class*="col-"],.ds .bron-form .modal-block-content{
+    float:none!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important;background:transparent!important;box-shadow:none!important;min-height:0!important}
+  .ds .bron-form .f-header,.ds .bron-form h1,.ds .bron-form h2,.ds .bron-form h3{display:none!important}
+  .ds .bron-form .builder-item{margin:0 0 12px!important}
+  .ds .bron-form input.f-input,.ds .bron-form input.form-control,.ds .bron-form input[type="text"],.ds .bron-form input[type="email"],.ds .bron-form input[type="tel"]{
+    display:block!important;width:100%!important;max-width:100%!important;min-height:56px!important;margin:0 0 12px!important;
+    padding:14px 16px!important;border:1px solid #E2DCE8!important;border-radius:10px!important;
+    background:#fff!important;color:#1A1A1A!important;font:400 15px/1.4 var(--text)!important;
+    box-shadow:none!important;outline:none!important;transition:border-color .18s ease,box-shadow .18s ease}
+  .ds .bron-form .f-input-wrapper input{margin-bottom:0!important}
+  .ds .bron-form .f-input-wrapper{margin:0 0 12px!important}
+  .ds .bron-form input::placeholder{color:#8A8490!important;opacity:1}
+  .ds .bron-form input:focus{border-color:#6B3FA0!important;box-shadow:0 0 0 3px rgba(107,63,160,.14)!important}
+  .ds .bron-form button[type="submit"],.ds .bron-form input[type="submit"],.ds .bron-form .btn-success{
+    display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;
+    min-height:58px!important;margin:8px 0 0!important;padding:12px 24px!important;border:0!important;
+    border-radius:10px!important;background:#6B3FA0!important;color:#fff!important;text-align:center!important;
+    font:400 16px/1.2 var(--display)!important;letter-spacing:-.02em;white-space:normal!important;cursor:pointer!important;
+    box-shadow:none!important;transition:background .18s ease,transform .18s ease}
+  .ds .bron-form button[type="submit"]:hover,.ds .bron-form input[type="submit"]:hover{background:#3E2468!important;transform:translateY(-1px)}
+  .ds .bron-form .f-input-wrapper[data-type="checkbox"]{display:block!important;margin:4px 0 10px!important}
+  .ds .bron-form .f-input-wrapper[data-type="checkbox"]>.field-label{display:flex!important;align-items:flex-start!important;gap:10px!important;margin:0!important;color:#1A1A1A!important;font:400 13px/1.4 var(--text)!important;font-style:normal!important}
+  .ds .bron-form input[type="checkbox"]{display:block!important;flex:0 0 18px!important;width:18px!important;height:18px!important;margin:0!important;accent-color:#6B3FA0;cursor:pointer}
+  .ds .bron-form .field-description-block{margin:2px 0 0 28px!important;color:#6B6570!important;font:400 12px/1.45 var(--text)!important}
+  .ds .bron-form .field-description-block a,.ds .bron-form .field-label a{color:#6B3FA0!important;text-decoration:underline!important;text-underline-offset:2px}
+  .ds .bron-form .form-result-block:empty{display:none}
+
+  html:not(.is-phone) .ds .bron-grid{min-height:100svh}
+  @media (max-width:1180px){
+    html:not(.is-phone) .ds .bron-grid{grid-template-columns:1fr;max-width:620px;margin:0 auto;min-height:0;padding:72px 0}
+  }
+  html.is-phone .ds .bron-grid{grid-template-columns:1fr;gap:28px;min-height:0;padding:40px 0 36px}
+  html.is-phone .ds .bron .eyebrow{font-size:12px;margin-bottom:16px}
+  html.is-phone .ds .bron h1{font-size:clamp(38px,11.4vw,64px)}
+  html.is-phone .ds .bron h1 .indent{padding-left:0}
+  html.is-phone .ds .bron-lead{margin-top:18px}
+  html.is-phone .ds .bron-facts{margin-top:22px;gap:8px}
+  html.is-phone .ds .bron-facts li{min-height:36px;padding:0 14px;font-size:13px}
+  html.is-phone .ds .bron-card{padding:26px 18px 22px;border-radius:16px}
+  html.is-phone .ds .bron-card h2{font-size:24px}
+</style>
+<div class="ds">
+  <!-- Бронь места -->
+  <section class="bron on-dark" id="top">
+    <div class="col bron-grid">
+      <div class="bron-copy">
+        <p class="eyebrow">Союз с собой · 5 сезон</p>
+        <h1><span>Забронируй</span><span class="indent">своё место</span></h1>
+        <p class="bron-lead">Оставь контакты, и место в 5&nbsp;сезоне <span style="white-space:nowrap">«Союза с собой»</span> закрепится за тобой.</p>
+        <ul class="bron-facts">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Бронь бесплатная</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Старт 15 декабря 2026 года</li>
+        </ul>
+      </div>
+      <div class="bron-card">
+        <h2>Бронь места</h2>
+        <p class="bron-card-sub">Имя, телефон и ник в Telegram — этого достаточно.</p>
+        <div class="bron-form" id="bron-form">
+          <p class="bron-wait" id="bron-wait" hidden>Форма загружается…</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="col">
+      <div class="footer-req">
+        <strong>Индивидуальный предприниматель<br>Малаховская Дарья Андреевна</strong>
+        <span>ИНН: 251119056955</span>
+        <span>ОГРНИП: 323253600083982</span>
+        <!-- КОНТАКТЫ: добавить почту и телефон для связи -->
+      </div>
+      <div class="footer-links">
+        <a class="tg" href="https://t.me/daarisoul" target="_blank" rel="noopener" aria-label="Telegram">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.4 4.3 2.9 11.4c-1.3.5-1.2 1.2-.2 1.5l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.6 14.3l-.4 4-1.6-5 9.7-6.1c.5-.3.9-.1.5.2l-8.2 6.9Z"/></svg>
+          @daarisoul
+        </a>
+        <a class="offer" href="https://school.dari-malakhovskaya.ru/Oferta">Договор оферты</a>
+        <a href="https://school.dari-malakhovskaya.ru/Politika">Политика конфиденциальности</a>
+        <a href="https://school.dari-malakhovskaya.ru/soglasie-reklama">Согласие на получение информационной и рекламной рассылки</a>
+        <a href="https://school.dari-malakhovskaya.ru/persdatacept">Согласие на обработку персональных данных</a>
+      </div>
+    </div>
+  </footer>
+</div>
+<script>
+(function(){
+  // Переносим блок формы GetCourse в карточку. Вне GetCourse показываем макет полей.
+  var box=document.getElementById("bron-form"),wait=document.getElementById("bron-wait");
+  if(!box)return;
+  var isPreview=!/getcourse|dari-malakhovskaya\.ru/.test(location.hostname);
+  function preview(){
+    box.insertAdjacentHTML("beforeend",
+      '<div class="f-input-wrapper"><input type="text" placeholder="Ваше имя"></div>'+
+      '<div class="f-input-wrapper"><input type="tel" placeholder="Телефон"></div>'+
+      '<div class="f-input-wrapper"><input type="text" placeholder="Ник в Telegram, например @name"></div>'+
+      '<div class="f-input-wrapper" data-type="checkbox"><label class="field-label"><input type="checkbox"><span>Согласна на обработку <a href="https://school.dari-malakhovskaya.ru/persdatacept">персональных данных</a></span></label></div>'+
+      '<div class="f-input-wrapper" data-type="checkbox"><label class="field-label"><input type="checkbox"><span>Согласна на получение <a href="https://school.dari-malakhovskaya.ru/soglasie-reklama">рассылки</a></span></label></div>'+
+      '<button type="submit" disabled>Забронировать место</button>');
+  }
+  function findForm(){
+    var forms=document.querySelectorAll("form");
+    for(var i=0;i<forms.length;i++){
+      if(box.contains(forms[i]))continue;
+      return forms[i].closest(".lt-block")||forms[i];
+    }
+    return null;
+  }
+  var tries=0;
+  (function attempt(){
+    var f=findForm();
+    if(f){box.appendChild(f);if(wait)wait.hidden=true;return;}
+    if(isPreview){preview();return;}
+    if(wait)wait.hidden=false;
+    if(++tries<40)setTimeout(attempt,250);
+  })();
+})();
+</script>
