@@ -196,10 +196,8 @@
   .ds .plan-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-top:1px solid var(--hair-dark);color:var(--on-dark)}
   .ds .plan-item svg{width:18px;height:18px;flex:none;color:var(--sand)}
   .ds .plan-item b{color:#fff}
-  .ds .plan-item.star{margin:8px 0;padding:18px 20px;border:1px solid rgba(201,166,232,.38);border-radius:14px;background:rgba(201,166,232,.12);flex-direction:column;align-items:flex-start;justify-content:center;gap:6px}
+  .ds .plan-item.star{margin:6px -14px;padding:14px;border:1px solid rgba(201,166,232,.38);border-radius:12px;background:rgba(201,166,232,.12)}
   .ds .plan-item.star+.plan-item{border-top:0}
-  .ds .plan-item.star strong{display:flex;align-items:center;gap:10px;font:400 15px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;color:var(--sand)}
-  .ds .plan-item.star span{color:#fff}
   .ds .plan-price{padding-top:24px;border-top:1px solid var(--hair-dark)}
   .ds .plan-price .eyebrow{color:var(--on-dark-soft)}
   .ds .plan-price b{display:block;margin-top:12px;font:400 clamp(40px,4vw,54px)/1 var(--display);letter-spacing:-.03em;color:#fff;white-space:nowrap}
@@ -329,16 +327,9 @@
   html.is-phone .ds .sec-cta .btn{width:100%;min-width:0}
   html.is-phone .ds .sec-cta{margin-top:32px}
 
-  /* Чем VIP отличается, рамки */
-  .ds .vip-diff{display:grid;grid-template-columns:.8fr 1fr 1fr 1fr;gap:14px;max-width:1080px;margin:48px auto 0;padding:24px 28px;border-radius:var(--r);background:rgba(201,166,232,.08);border:1px solid var(--hair-dark)}
-  .ds .vip-diff li{display:grid;align-content:center;gap:6px}
-  .ds .vip-diff .eyebrow{color:var(--sand)}
-  .ds .vip-diff b{font:400 18px/1.1 var(--display);letter-spacing:-.02em;color:#fff}
-  .ds .vip-diff p{font-size:13px;color:var(--on-dark)}
-  .ds .vip-diff+.plans{margin-top:14px}
+  /* Рамки */
   .ds .frames{max-width:44em;margin:36px auto 0;padding:18px 24px;border-radius:14px;border:1px solid var(--hair-dark);text-align:center;font-size:14px;color:var(--on-dark)}
   .ds .frames+.tariffs-note{margin-top:16px}
-  html.is-phone .ds .vip-diff{grid-template-columns:1fr;gap:14px;margin-top:32px;padding:22px 20px}
   html.is-phone .ds .frames{padding:16px 18px;font-size:13px}
 
   /* Вопросы */
@@ -531,12 +522,6 @@
         <p class="eyebrow rv">Тарифы</p>
         <h2 class="h2 rv">Выбери формат участия</h2>
       </div>
-      <ul class="vip-diff rv">
-        <li><span class="eyebrow">Чем VIP отличается</span></li>
-        <li><b>Личный контакт с Дари</b><p>Вместо ответов в общем чате</p></li>
-        <li><b>Личная поддержка Дари</b><p>Вместо куратора, на всём пути</p></li>
-        <li><b>Два дня за городом</b><p>Под Москвой: терапия, съёмка и нетворкинг</p></li>
-      </ul>
       <div class="plans">
         <article class="plan rv">
           <div class="plan-top"><div class="plan-head"><h3 class="plan-name">Поток</h3><span class="plan-seats">270 мест</span></div><p class="plan-for">Для тех, кто готов идти в терапевтический процесс через живые эфиры со мной, практики и работу в общем поле.</p></div>
@@ -568,7 +553,7 @@
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Личный контакт с Дари</b></span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Рабочие практики и задания</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Подкасты и материалы</span></p>
-          <div class="plan-item star"><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true" style="width:20px;height:20px"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>Личная поддержка Дари</strong><span>На всём пути участия</span></div>
+          <p class="plan-item star"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg><span><b>Личная поддержка Дари</b> на всём пути участия</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Записи эфиров с бессрочным доступом</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Общее терапевтическое поле</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Двухдневная встреча</b> в загородном доме под Москвой: терапия, съёмка и нетворкинг</span></p>
