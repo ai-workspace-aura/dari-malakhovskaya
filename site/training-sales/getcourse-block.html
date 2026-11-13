@@ -123,8 +123,8 @@
   .ds .for-card p{color:var(--muted)}
 
   /* 4. Путь */
-  .ds .stages{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:56px}
-  .ds .stage{display:grid;grid-template-columns:172px 1fr;min-height:200px;overflow:hidden;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark)}
+  .ds .stages{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:56px}
+  .ds .stage{display:grid;grid-template-columns:140px 1fr;min-height:200px;overflow:hidden;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark)}
   .ds .stage-art{position:relative;background:var(--cocoa)}
   .ds .stage-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 18%}
   .ds .stage-body{display:flex;flex-direction:column;justify-content:center;padding:28px}
@@ -132,8 +132,12 @@
   .ds .stage h3{margin-top:14px;font:400 26px/1 var(--display);letter-spacing:-.03em;text-transform:uppercase;color:#fff}
   .ds .stage p{margin-top:12px;color:var(--on-dark);font-size:15px}
   .ds .stage.final{grid-column:1/-1;grid-template-columns:1fr 1fr;background:radial-gradient(90% 90% at 70% 0%,rgba(107,63,160,.5),rgba(107,63,160,.12) 100%),#1F1828;border-color:rgba(201,166,232,.38)}
-  .ds .stage.final .stage-body{padding:40px 48px}
-  .ds .stage.final h3{font-size:clamp(32px,3.4vw,50px);color:var(--sand)}
+  .ds .stage.final{grid-column:3;grid-row:1/3;grid-template-columns:1fr;position:relative}
+  .ds .stage.final .stage-art{position:absolute;inset:0}
+  .ds .stage.final .stage-art img{object-position:center 20%}
+  .ds .stage.final .stage-art::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(31,24,40,.96) 0%,rgba(46,28,72,.75) 38%,rgba(31,24,40,0) 70%)}
+  .ds .stage.final .stage-body{position:relative;justify-content:flex-end;padding:32px}
+  .ds .stage.final h3{font-size:clamp(30px,2.8vw,40px);color:var(--sand)}
   .ds .stage.final p{font-size:17px;color:#fff}
 
   /* 5. Что входит */
@@ -244,7 +248,12 @@
   @media (max-width:1180px){
     html:not(.is-phone) .ds .verbs{grid-template-columns:repeat(2,1fr)}
     html:not(.is-phone) .ds .for-grid,html:not(.is-phone) .ds .feat{grid-template-columns:repeat(2,1fr)}
+    html:not(.is-phone) .ds .stages{grid-template-columns:repeat(2,1fr)}
     html:not(.is-phone) .ds .stage{grid-template-columns:120px 1fr}
+    html:not(.is-phone) .ds .stage.final{grid-column:1/-1;grid-row:auto;grid-template-columns:1fr 1fr}
+    html:not(.is-phone) .ds .stage.final .stage-art{position:relative;inset:auto}
+    html:not(.is-phone) .ds .stage.final .stage-art::after{display:none}
+    html:not(.is-phone) .ds .stage.final .stage-body{justify-content:center;padding:40px 48px}
     }
 
   /* Телефон */
@@ -274,7 +283,9 @@
   html.is-phone .ds .stage{grid-template-columns:104px 1fr;min-height:0}
   html.is-phone .ds .stage-body{padding:20px 18px}
   html.is-phone .ds .stage h3{font-size:21px}
-  html.is-phone .ds .stage.final{grid-template-columns:1fr}
+  html.is-phone .ds .stage.final{grid-column:auto;grid-row:auto;grid-template-columns:1fr}
+  html.is-phone .ds .stage.final .stage-art{position:relative;inset:auto}
+  html.is-phone .ds .stage.final .stage-art::after{display:none}
   html.is-phone .ds .stage.final .stage-art{aspect-ratio:4/3}
   html.is-phone .ds .stage.final .stage-body{padding:24px 20px}
   html.is-phone .ds .live{grid-template-columns:1fr;margin-top:36px}
@@ -354,7 +365,7 @@
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>10 недель</b> «Союза с собой. 5.0»</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Живые эфиры со мной</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Разборы участниц в прямом эфире каждую неделю</span></p>
-          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Книга Дари «Жить жизнь» в подарок</span></p>
+          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Авторская книга Дари <span style="white-space:nowrap">«Нет выхода. Есть вход»</span> в подарок</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Возможность получать ответы от Дари в общем чате</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Рабочие практики и задания</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Подкасты и материалы</span></p>
@@ -377,7 +388,7 @@
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>10 недель</b> «Союза с собой. 5.0»</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Живые эфиры со мной</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Разборы участниц в прямом эфире каждую неделю</span></p>
-          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Книга Дари «Жить жизнь» в подарок</span></p>
+          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Авторская книга Дари <span style="white-space:nowrap">«Нет выхода. Есть вход»</span> в подарок</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Личный контакт с Дари</b></span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Рабочие практики и задания</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Подкасты и материалы</span></p>
