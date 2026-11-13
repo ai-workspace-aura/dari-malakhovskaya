@@ -106,7 +106,9 @@
   .ds .hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 20%}
 
   /* 2. Либидо жизни */
-  .ds .lib-q{margin-top:28px;font:400 clamp(24px,2.3vw,34px)/1.1 var(--display);letter-spacing:-.03em;color:var(--g-dark)}
+  .ds .head-row.top{align-items:start}
+  .ds .lib-intro{max-width:30em;margin-top:24px}
+  .ds .lib-q{font:400 clamp(24px,2.3vw,34px)/1.1 var(--display);letter-spacing:-.03em;color:var(--g-dark)}
   .ds .lib-copy .muted+.muted{margin-top:12px}
   .ds .lib-copy .lib-q+.muted{margin-top:16px}
   .ds .verbs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:56px}
@@ -305,6 +307,38 @@
   html.is-phone .ds .reviews-cta .btn,html.is-phone .ds .ask .btn{width:100%;min-width:0}
   html.is-phone .ds .footer .col{grid-template-columns:1fr}
   html.is-phone .ds .footer-links{justify-items:start;text-align:left}
+  /* Кнопки между блоками */
+  .ds .sec-cta{display:flex;justify-content:center;margin-top:48px}
+  .ds .sec-cta .btn{min-width:280px}
+  .ds .sticky-cta{display:none}
+  html.is-phone .ds .sticky-cta{position:fixed;left:16px;right:16px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:10px;background:var(--g);color:#fff;font:400 15px/1 var(--display);text-decoration:none;box-shadow:0 10px 30px rgba(17,17,17,.35);opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+  html.is-phone .ds .sticky-cta.on{opacity:1;transform:none;pointer-events:auto}
+  html.is-phone .ds .sec-cta .btn{width:100%;min-width:0}
+  html.is-phone .ds .sec-cta{margin-top:32px}
+
+  /* Чем VIP отличается, рамки */
+  .ds .vip-diff{display:grid;grid-template-columns:.8fr 1fr 1fr 1fr;gap:14px;max-width:1080px;margin:48px auto 0;padding:24px 28px;border-radius:var(--r);background:rgba(201,166,232,.08);border:1px solid var(--hair-dark)}
+  .ds .vip-diff li{display:grid;align-content:center;gap:6px}
+  .ds .vip-diff .eyebrow{color:var(--sand)}
+  .ds .vip-diff b{font:400 18px/1.1 var(--display);letter-spacing:-.02em;color:#fff}
+  .ds .vip-diff p{font-size:13px;color:var(--on-dark)}
+  .ds .vip-diff+.plans{margin-top:14px}
+  .ds .frames{max-width:44em;margin:36px auto 0;padding:18px 24px;border-radius:14px;border:1px solid var(--hair-dark);text-align:center;font-size:14px;color:var(--on-dark)}
+  .ds .frames+.tariffs-note{margin-top:16px}
+  html.is-phone .ds .vip-diff{grid-template-columns:1fr;gap:14px;margin-top:32px;padding:22px 20px}
+  html.is-phone .ds .frames{padding:16px 18px;font-size:13px}
+
+  /* Вопросы */
+  .ds .faq-list{max-width:880px;margin:48px auto 0}
+  .ds .faq details{border-top:1px solid rgba(62,36,104,.18)}
+  .ds .faq details:last-child{border-bottom:1px solid rgba(62,36,104,.18)}
+  .ds .faq summary{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:22px 0;cursor:pointer;list-style:none;font:400 clamp(18px,1.6vw,22px)/1.2 var(--display);letter-spacing:-.03em;color:var(--ink)}
+  .ds .faq summary::-webkit-details-marker{display:none}
+  .ds .faq summary::after{content:"";flex:none;width:12px;height:12px;border-right:1px solid var(--g);border-bottom:1px solid var(--g);transform:rotate(45deg) translate(-3px,-3px);transition:transform .25s var(--ease)}
+  .ds .faq details[open] summary::after{transform:rotate(-135deg) translate(-3px,-3px)}
+  .ds .faq details p{max-width:44em;padding:0 0 24px;color:var(--muted);font-size:15px}
+  .ds .faq details a{color:var(--g)}
+  html.is-phone .ds .faq-list{margin-top:32px}
 </style>
 
 <div class="ds">
@@ -333,13 +367,19 @@
         <p class="eyebrow rv">Тарифы</p>
         <h2 class="h2 rv">Выбери формат участия</h2>
       </div>
+      <ul class="vip-diff rv">
+        <li><span class="eyebrow">Чем VIP отличается</span></li>
+        <li><b>Личный контакт с Дари</b><p>Вместо ответов в общем чате</p></li>
+        <li><b>Личная поддержка Дари</b><p>Вместо куратора, на всём пути</p></li>
+        <li><b>Два дня за городом</b><p>Под Москвой: терапия, съёмка и нетворкинг</p></li>
+      </ul>
       <div class="plans">
         <article class="plan rv">
           <div class="plan-top"><div class="plan-head"><h3 class="plan-name">Поток</h3><span class="plan-seats">270 мест</span></div><p class="plan-for">Для тех, кто готов идти в терапевтический процесс через живые эфиры со мной, практики и работу в общем поле.</p></div>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>10 недель</b> «Союза с собой. 5.0»</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Живые эфиры со мной</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Разборы участниц в прямом эфире каждую неделю</span></p>
-          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Авторская книга Дари Малаховской «Нет выхода. Есть вход. Лабиринт · Согласие · Счастье»</span></p>
+          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Книга Дари «Жить жизнь» в подарок</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Возможность получать ответы от Дари в общем чате</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Рабочие практики и задания</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Подкасты и материалы</span></p>
@@ -347,7 +387,7 @@
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Записи эфиров с бессрочным доступом</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Общее терапевтическое поле</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Живая встреча в Москве после окончания проекта</span></p>
-          <div class="plan-price"><p class="eyebrow">Стоимость участия</p><b>69 900 ₽</b><span>Картой или в рассрочку</span></div>
+          <div class="plan-price"><p class="eyebrow">Стоимость участия</p><b>69 900 ₽</b><span>Картой или в рассрочку от 5 825 ₽ в месяц</span><!-- РАССРОЧКА: сумма посчитана как 69 900 / 12 мес. — сверить с условиями банка --></div>
           <div class="plan-cta">
             <!-- ОПЛАТА: ссылка на предложение GetCourse, тариф «Поток» -->
             <a class="btn" href="#">Выбрать Поток
@@ -360,7 +400,7 @@
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>10 недель</b> «Союза с собой. 5.0»</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Живые эфиры со мной</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Разборы участниц в прямом эфире каждую неделю</span></p>
-          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Авторская книга Дари Малаховской «Нет выхода. Есть вход. Лабиринт · Согласие · Счастье»</span></p>
+          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Книга Дари «Жить жизнь» в подарок</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Личный контакт с Дари</b></span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Рабочие практики и задания</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Подкасты и материалы</span></p>
@@ -368,7 +408,7 @@
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Записи эфиров с бессрочным доступом</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Общее терапевтическое поле</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Двухдневная встреча</b> в загородном доме под Москвой: терапия, съёмка и нетворкинг</span></p>
-          <div class="plan-price"><p class="eyebrow">Стоимость участия</p><b>170 000 ₽</b><span>Картой или в рассрочку</span></div>
+          <div class="plan-price"><p class="eyebrow">Стоимость участия</p><b>170 000 ₽</b><span>Картой или в рассрочку от 14 167 ₽ в месяц</span><!-- РАССРОЧКА: сумма посчитана как 170 000 / 12 мес. — сверить с условиями банка --></div>
           <div class="plan-cta">
             <!-- ОПЛАТА: ссылка на предложение GetCourse, тариф VIP -->
             <a class="btn" href="#">Выбрать VIP
@@ -377,6 +417,7 @@
           </div>
         </article>
       </div>
+      <p class="frames rv">Я не обещаю доход, исцеление или быстрый результат. Это не медицинская помощь. Всё, чем ты делишься, — добровольно и остаётся в группе.</p>
       <p class="tariffs-note rv">Нажимая «Выбрать», ты принимаешь условия <a href="https://school.dari-malakhovskaya.ru/Oferta" target="_blank" rel="noopener">договора оферты</a>.</p>
     </div>
   </section>
@@ -403,6 +444,17 @@
   </footer>
 </div>
 <script>
+(function(){
+  // Кнопка «Выбрать тариф» внизу экрана на телефоне: видна после первого экрана, прячется у тарифов
+  var bar=document.querySelector(".ds .sticky-cta"),hero=document.getElementById("top"),tar=document.getElementById("tariffs");
+  if(bar&&hero&&tar){
+    var upd=function(){
+      var h=hero.getBoundingClientRect(),t=tar.getBoundingClientRect(),vh=window.innerHeight;
+      bar.classList.toggle("on",h.bottom<0&&!(t.top<vh&&t.bottom>0));
+    };
+    window.addEventListener("scroll",upd,{passive:true});window.addEventListener("resize",upd);upd();
+  }
+})();
 (function(){
   // Плавное появление блоков при прокрутке
   var items=document.querySelectorAll(".ds .rv");
