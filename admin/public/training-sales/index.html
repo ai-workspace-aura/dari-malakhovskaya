@@ -93,7 +93,7 @@
   /* 1. Первый экран */
   .ds .hero{position:relative;overflow:hidden}
   .ds .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 90% at 78% 30%,rgba(107,63,160,.32),transparent 62%);pointer-events:none}
-  .ds .hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);gap:clamp(28px,4vw,56px);align-items:center;min-height:min(92svh,900px);padding:clamp(36px,4.5vw,68px) 0}
+  .ds .hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);gap:clamp(28px,4vw,56px);align-items:center;min-height:100vh;min-height:100svh;padding:clamp(36px,4.5vw,68px) 0}
   .ds .hero-copy{display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
   .ds .hero .eyebrow{margin-bottom:22px;font-size:14px}
   .ds .hero h1{font:400 clamp(56px,6.4vw,104px)/.92 var(--display);text-transform:uppercase;letter-spacing:-.03em;color:var(--sand)}
