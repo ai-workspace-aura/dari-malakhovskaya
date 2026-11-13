@@ -1,12 +1,12 @@
-"""Собирает site/bron/getcourse-block.html из стилей и подвала site/main.
-Запуск из корня проекта: python3 site/bron/build.py "$PWD"
+"""Собирает site/training-booking/getcourse-block.html из стилей и подвала site/main.
+Запуск из корня проекта: python3 site/training-booking/build.py "$PWD"
 """
 import re, sys
 root = sys.argv[1]
 s = open(root + "/site/main/getcourse-block.html", encoding="utf-8").read()
 head = s[:s.index('<div class="ds">')]
 head = re.sub(r'^<!--.*?-->\n<!--.*?-->\n', '''<!-- Союз с собой — безоплатная бронь места (2-й день тренинга). Вставлять в HTML-блок GetCourse целиком. Стили и подвал взяты из основного сайта (site/main).
-     АДРЕС СТРАНИЦЫ: school.dari-malakhovskaya.ru/bron -->
+     АДРЕС СТРАНИЦЫ: school.dari-malakhovskaya.ru/training-booking -->
 <!-- ФОРМА: под этим HTML-блоком поставить блок «Форма» GetCourse с полями: имя, телефон, ник в Telegram (+ согласия). Заголовок у формы можно не писать —
      скрипт сам перенесёт форму в карточку справа и скроет её заголовок. Текст кнопки в форме: «Забронировать место». -->
 ''', head, count=1, flags=re.S)
@@ -138,5 +138,5 @@ script = r'''<script>
 '''
 
 out = head + css + '<div class="ds">\n' + section + '\n' + footer + '\n</div>\n' + script
-open(root + "/site/bron/getcourse-block.html", "w", encoding="utf-8").write(out)
+open(root + "/site/training-booking/getcourse-block.html", "w", encoding="utf-8").write(out)
 print("ok", len(out))
