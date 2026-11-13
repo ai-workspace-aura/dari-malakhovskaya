@@ -55,7 +55,6 @@
   .ds b,.ds strong{font-weight:400}
   .ds button{font-family:inherit}
   .ds .col{width:min(1240px,calc(100% - 96px));margin:0 auto}
-  .ds section{scroll-margin-top:64px}
   .ds .on-dark{--taupe:#C9A6E8;background:var(--esp);color:#fff}
   .ds .bg-stone{background:var(--stone)}
   .ds .bg-paper{background:var(--paper)}
@@ -89,19 +88,11 @@
   .ds .ico svg{width:22px;height:22px}
   .ds .on-dark .ico{background:rgba(201,166,232,.1);border-color:var(--hair-dark);color:var(--sand)}
 
-  /* Меню */
-  .ds .nav{position:sticky;top:0;z-index:50;background:rgba(26,26,26,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--hair-dark)}
-  .ds .nav .col{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:64px}
-  .ds .nav-logo{font:400 16px/1 var(--display);letter-spacing:.02em;text-transform:uppercase;color:var(--sand);text-decoration:none;white-space:nowrap}
-  .ds .nav-links{display:flex;gap:28px}
-  .ds .nav-links a{font:400 13px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;color:var(--on-dark);text-decoration:none;transition:color .2s}
-  .ds .nav-links a:hover{color:var(--sand)}
-  .ds .nav .btn{min-height:40px;padding:0 20px;font-size:14px}
 
   /* 1. Первый экран */
   .ds .hero{position:relative;overflow:hidden}
   .ds .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 90% at 78% 30%,rgba(107,63,160,.32),transparent 62%);pointer-events:none}
-  .ds .hero-grid{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:stretch;min-height:calc(100svh - 64px);padding:48px 0}
+  .ds .hero-grid{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:stretch;min-height:100svh;padding:48px 0}
   .ds .hero-copy{display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
   .ds .hero .eyebrow{margin-bottom:22px;font-size:14px}
   .ds .hero h1{font:400 clamp(56px,6.4vw,112px)/.92 var(--display);text-transform:uppercase;letter-spacing:-.03em;color:var(--sand)}
@@ -261,15 +252,11 @@
     html:not(.is-phone) .ds .verbs{grid-template-columns:repeat(2,1fr)}
     html:not(.is-phone) .ds .for-grid,html:not(.is-phone) .ds .feat{grid-template-columns:repeat(2,1fr)}
     html:not(.is-phone) .ds .stage{grid-template-columns:120px 1fr}
-    html:not(.is-phone) .ds .nav-links{gap:18px}
-  }
+    }
 
   /* Телефон */
   html.is-phone .ds .col{width:calc(100% - 32px)}
   html.is-phone .ds .sec{padding:72px 0}
-  html.is-phone .ds .nav-links{display:none}
-  html.is-phone .ds .nav .col{min-height:56px}
-  html.is-phone .ds section{scroll-margin-top:56px}
   html.is-phone .ds .head-row{grid-template-columns:1fr;gap:20px}
   html.is-phone .ds .big-quote{margin-top:40px}
   html.is-phone .ds .hero-grid{grid-template-columns:1fr;gap:32px;min-height:0;padding:36px 0 32px}
