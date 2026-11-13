@@ -159,7 +159,7 @@
 
   /* 6. Результаты */
   .ds .results{display:grid;grid-template-columns:repeat(3,1fr);gap:0 40px;margin-top:48px}
-  .ds .res{padding:28px 0 36px;border-top:1px solid var(--ink)}
+  .ds .res{padding:28px 0 36px;border-top:1px solid rgba(62,36,104,.18)}
   .ds .res .ico{margin-bottom:20px}
   .ds .res b{display:block;font:400 22px/1.05 var(--display);letter-spacing:-.03em;text-transform:uppercase;color:var(--ink)}
   .ds .res p{margin-top:10px;color:var(--muted)}
@@ -325,8 +325,8 @@
   .ds .faq details:last-child{border-bottom:1px solid rgba(62,36,104,.18)}
   .ds .faq summary{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:22px 0;cursor:pointer;list-style:none;font:400 clamp(18px,1.6vw,22px)/1.2 var(--display);letter-spacing:-.03em;color:var(--ink)}
   .ds .faq summary::-webkit-details-marker{display:none}
-  .ds .faq summary::after{content:"";flex:none;width:12px;height:12px;border-right:1px solid var(--g);border-bottom:1px solid var(--g);transform:rotate(45deg) translate(-3px,-3px);transition:transform .25s var(--ease)}
-  .ds .faq details[open] summary::after{transform:rotate(-135deg) translate(-3px,-3px)}
+  .ds .faq summary::after{content:"";flex:none;width:8px;height:8px;border-right:1px solid var(--g);border-bottom:1px solid var(--g);transform:rotate(45deg) translate(-2px,-2px);transition:transform .25s var(--ease)}
+  .ds .faq details[open] summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
   .ds .faq details p{max-width:44em;padding:0 0 24px;color:var(--muted);font-size:15px}
   .ds .faq details a{color:var(--g)}
   html.is-phone .ds .faq-list{margin-top:32px}
