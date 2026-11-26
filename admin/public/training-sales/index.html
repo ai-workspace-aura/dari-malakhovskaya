@@ -185,8 +185,19 @@
   .ds .week p{color:var(--muted)}
 
   /* 8. Тарифы */
-  .ds .plans{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(14,auto);column-gap:14px;max-width:1080px;margin:56px auto 0}
-  .ds .plan{display:grid;grid-row:span 14;grid-template-rows:subgrid;padding:36px 32px 32px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark)}
+  /* Приглашённые эксперты */
+  .ds .experts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:56px}
+  .ds .expert{display:flex;flex-direction:column;overflow:hidden;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark)}
+  .ds .expert figure{position:relative;margin:0;aspect-ratio:4/5;background:var(--cocoa)}
+  .ds .expert figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+  .ds .expert-ph{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(80% 70% at 50% 35%,rgba(107,63,160,.45),rgba(107,63,160,.08) 70%),#1F1828;font:400 120px/1 var(--display);color:var(--sand)}
+  .ds .expert-body{display:flex;flex-direction:column;padding:26px 26px 30px}
+  .ds .expert-role{font:400 12px/1.4 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--sand)}
+  .ds .expert h3{margin-top:10px;font:400 30px/1 var(--display);letter-spacing:-.03em;text-transform:uppercase;color:#fff}
+  .ds .expert p{margin-top:14px;font-size:15px;color:var(--on-dark)}
+  .ds .experts-note{max-width:44em;margin:32px auto 0;text-align:center;font:400 clamp(18px,1.6vw,22px)/1.25 var(--display);letter-spacing:-.02em;color:var(--sand)}
+  .ds .plans{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(15,auto);column-gap:14px;max-width:1080px;margin:56px auto 0}
+  .ds .plan{display:grid;grid-row:span 15;grid-template-rows:subgrid;padding:36px 32px 32px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid var(--hair-dark)}
   .ds .plan.vip{background:radial-gradient(90% 40% at 50% 0%,rgba(107,63,160,.5),rgba(107,63,160,.12) 100%),#1F1828;border-color:rgba(201,166,232,.38)}
   .ds .plan-top{padding-bottom:20px}
   .ds .plan-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -265,6 +276,8 @@
   @media (max-width:1180px){
     html:not(.is-phone) .ds .verbs{grid-template-columns:repeat(2,1fr)}
     html:not(.is-phone) .ds .for-grid,html:not(.is-phone) .ds .feat{grid-template-columns:repeat(2,1fr)}
+    html:not(.is-phone) .ds .expert-body{padding:22px 20px 26px}
+    html:not(.is-phone) .ds .expert h3{font-size:26px}
     html:not(.is-phone) .ds .stages{grid-template-columns:repeat(2,1fr)}
     html:not(.is-phone) .ds .stage{grid-template-columns:120px 1fr}
     html:not(.is-phone) .ds .stage.final{grid-column:1/-1;grid-row:auto;grid-template-columns:1fr 1fr}
@@ -311,6 +324,11 @@
   html.is-phone .ds .live-copy{padding:28px 20px}
   html.is-phone .ds .live figure{min-height:0;aspect-ratio:4/3.4;order:-1}
   html.is-phone .ds .feat{gap:10px;margin-top:10px}
+  html.is-phone .ds .experts{grid-template-columns:1fr;gap:12px;margin-top:36px}
+  html.is-phone .ds .expert figure{aspect-ratio:1/1}
+  html.is-phone .ds .expert-body{padding:22px 20px 24px}
+  html.is-phone .ds .expert h3{font-size:26px}
+  html.is-phone .ds .experts-note{margin-top:24px}
   html.is-phone .ds .results{margin-top:28px}
   html.is-phone .ds .res{padding:22px 0 26px}
   html.is-phone .ds .plans{grid-template-columns:1fr;row-gap:0;margin-top:36px}
@@ -387,6 +405,8 @@
           <div class="plan-top"><div class="plan-head"><h3 class="plan-name">Поток</h3><span class="plan-seats">270 мест</span></div><p class="plan-for">Для тех, кто готов идти в терапевтический процесс через живые эфиры со мной, практики и работу в общем поле.</p></div>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>10 недель</b> «Союза с собой»</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Живые эфиры со мной</span></p>
+          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>10 недель</b> «Союза с собой»</span></p>
+          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Эфиры с экспертами:</b> тело, нейрографика, энергия</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Разборы участниц в прямом эфире каждую неделю</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Авторская книга Дари <span style="white-space:nowrap">«Нет выхода. Есть вход»</span> в подарок</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Возможность получать ответы от Дари в общем чате</span></p>
@@ -410,6 +430,8 @@
           <div class="plan-top"><div class="plan-head"><h3 class="plan-name">VIP</h3><span class="plan-seats">30 мест</span></div><p class="plan-for">Для тех, кто готов удваиваться и расширяться через личное касание с Дари.</p></div>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>10 недель</b> «Союза с собой»</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Живые эфиры со мной</span></p>
+          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>10 недель</b> «Союза с собой»</span></p>
+          <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Эфиры с экспертами:</b> тело, нейрографика, энергия</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Разборы участниц в прямом эфире каждую неделю</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Авторская книга Дари <span style="white-space:nowrap">«Нет выхода. Есть вход»</span> в подарок</span></p>
           <p class="plan-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Личный контакт с Дари</b></span></p>
@@ -445,7 +467,7 @@
       <div class="faq-list rv">
         <details><summary>Это про секс?</summary><p>Нет. Либидо здесь — желание жить: чувствовать, хотеть, выбирать, создавать и получать. Сексуальность тоже бывает темой, но не единственной и не обязательной.</p></details>
         <details><summary>Нужно ли проходить прошлые сезоны?</summary><p>Нет. У каждого сезона своя тема, и в пятый можно прийти впервые.</p></details>
-        <details><summary>Когда старт и как проходят встречи?</summary><p>Старт 15 декабря 2026 года. Раз в неделю встречаемся вживую в Zoom, между встречами — задания и общение в закрытой Telegram-группе.</p></details>
+        <details><summary>Когда старт и как проходят встречи?</summary><p>Старт 15 декабря 2026 года. Раз в неделю встречаемся со мной вживую в Zoom и ещё раз в неделю — на эфире с одним из приглашённых экспертов. Между встречами — задания и общение в закрытой Telegram-группе.</p></details>
         <details><summary>Что если я пропущу эфир?</summary><p>Все эфиры остаются в записи с бессрочным доступом. Но живой эфир и запись — разные вещи. Приходи вживую, когда можешь.</p></details>
         <details><summary>Чем отличаются тарифы?</summary><p>Оба тарифа — полный путь сезона. В VIP у тебя личный контакт и личная поддержка Дари на всём пути, а в конце — два дня вместе за городом под Москвой.</p></details>
         <details><summary>Можно в рассрочку?</summary><p>Да, через банки-партнёры. Если один банк отказал, попробуй другой или в другой день: отказ одного банка не значит, что тебе нельзя.</p></details>
